@@ -73,10 +73,7 @@
 		"import/no-extraneous-dependencies": [
 			"error",
 			{
-				"devDependencies": [
-					"vite.config.ts",
-					"src/mocks/**"
-				]
+				"devDependencies": ["vite.config.ts", "src/mocks/**"]
 			}
 		],
 
@@ -123,6 +120,7 @@
 		"react/jsx-no-constructed-context-values": "error",
 		"react/jsx-no-script-url": "error",
 		"react/jsx-no-useless-fragment": "error",
+		"@typescript-eslint/no-explicit-any": "off",
 
 		"unicorn/filename-case": [
 			"error",

@@ -1,9 +1,11 @@
-import {globalPluginCore} from './core'
+import { ColumnConfigType } from 'components/table'
+import { globalPluginCore, PluginConfig } from './core'
 
-class Plugin{
-  create(config:PluginConfig){
-    globalPluginCore.add(config)
+export const Plugin = {
+	columnType: ColumnConfigType,
 
-  }
-
+	create(config: PluginConfig) {
+		globalPluginCore.add(config)
+	}
 }
+export default Plugin

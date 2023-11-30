@@ -1,60 +1,44 @@
-import {
-	ColumnConfig,
-	ColumnConfigType,
-	DsField,
-	DsTable,
-	FieldType
-} from 'components/table'
+import { ColumnConfig, DsField, DsTable } from 'components/table'
+import { globalPluginCore } from 'plugin'
+import useDsState from 'state/table'
 
 // import { useDsListState, useDsState } from "state/table";
 // import { getRegisterList } from "./temp";
 
 // const registerList = getRegisterList();import type { ColumnConfig } from "components/type";
 
-export const columnConfigs: ColumnConfig[] = [
+const columnConfigs: ColumnConfig[] = [
 	{
-		accessorKey: 'fileName',
+		key: 'fileName',
 		header: '字段名称'
-	},
-	{
-		accessorKey: 'field',
-		header: '字段'
-	},
-	{
-		accessorKey: 'type',
-		header: '类型',
-		type: ColumnConfigType.Select,
-		options: Object.values(FieldType)
-	},
-	{
-		accessorKey: 'required',
-		header: '是否必输',
-		type: ColumnConfigType.Switch
 	}
 ]
+for (const column of globalPluginCore.exec('addColumn')) {
+	if (column) {
+		for (const columnConfig of column) {
+			if (columnConfig.key && !columnConfigs.some(item => item.key === columnConfig.key)) {
+				columnConfigs.push(columnConfig)
+			}
+		}
+	}
+}
 
 export function EditTable(): JSX.Element {
-	const data: DsField[] = [
-		{
-			id: '1',
-			fileName: '文件名',
-			type: FieldType.String,
-			field: '字段',
-			required: true
-		}
-	]
+	// 	const data: DsField[] = [
+	// 		{
+	// 			id: '1',
+	// 			fileName: '文件名'
+	// 		}
+	// 	]
+	const [data, setData] = useDsState(state => [state.data, state.updateData])
 	// const [data, setData] = useDsState((state) => [state.data, state.updateData]);
 	// const [extraParameters, setExtraParameter] = useDsState((state) => [state.extraParams, state.updateExtraParam]);
 	// const [activeTab, setActiveTab] = useDsState((state) => [state.activeTab, state.updateActiveTab]);
 	// const [columnConfigs] = useDsState((state) => [state.columnConfigs]);
 	// const activeIndex = useDsListState((state) => state.activeIndex);
 
-	const handleClick = (eventData: DsField[]) => {
-		console.log(
-			'🚀 ~ file: EditTable.tsx:42 ~ handleClick ~ eventData:',
-			eventData
-		)
-		// setData(eventData);
+	const handleUpdate = (eventData: DsField[]) => {
+		setData(eventData)
 	}
 
 	// const handleTableChange = (value: TabsValue) => {
@@ -63,11 +47,7 @@ export function EditTable(): JSX.Element {
 	// };
 	return (
 		<div>
-			<DsTable
-				columnConfigs={columnConfigs}
-				data={data}
-				onChange={handleClick}
-			/>
+			<DsTable columnConfigs={columnConfigs} data={data} onChange={handleUpdate} />
 		</div>
 	)
 
