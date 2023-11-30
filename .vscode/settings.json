@@ -6,16 +6,17 @@
 		"source.fixAll",
 		"source.organizeImports"
 	],
-	"editor.foldingImportsByDefault": true,
 	"editor.formatOnSave": true,
 	"editor.tabSize": 2,
 	"files.watcherExclude": {
 		"**/dist": true
 	},
 	"javascript.format.enable": false,
-	"stylelint.validate": [
-		"css"
-	],
+	"stylelint.validate": ["css"],
 	"typescript.disableAutomaticTypeAcquisition": true,
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"cSpell.words": ["clsx", "zustand"],
+	"editor.quickSuggestions": {
+		"strings": "on"
+	}
 }
