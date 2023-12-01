@@ -1,9 +1,9 @@
 import LoadingOrError from 'components/LoadingOrError'
+import Home from 'pages/TableMaker'
 import type { ReactElement } from 'react'
-import { lazy, Suspense } from 'react'
+import { Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
-const Home = lazy(async () => import('pages/TableMaker'))
+// const Home = lazy(async () => import('pages/TableMaker'))
 
 export default function App(): ReactElement {
 	return (

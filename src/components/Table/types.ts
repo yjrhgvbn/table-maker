@@ -16,9 +16,9 @@ export enum ColumnConfigType {
 	Switch = 'switch'
 }
 
-export interface ColumnConfig<K extends string = string, T extends ColumnConfigType = ColumnConfigType> {
-	key: K
+export interface ColumnConfig {
+	key: string
 	header: string
-	type?: T
+	type?: ColumnConfigType
 	options?: string[]
 }

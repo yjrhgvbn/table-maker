@@ -1,29 +1,38 @@
-import FormControl, { useFormControl } from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import * as React from 'react'
-
-function MyFormHelperText() {
-	const { focused } = useFormControl() || {}
-
-	const helperText = React.useMemo(() => {
-		if (focused) {
-			return 'This field is being focused'
-		}
-
-		return 'Helper text'
-	}, [focused])
-
-	return <FormHelperText>{helperText}</FormHelperText>
-}
+import { Box, TextField } from '@mui/material'
+import useFormState from 'state/form'
 
 export default function UseFormControl() {
+	const [formItemConfigs] = useFormState(state => [state.formItemConfigs])
+	const [formData, updateForm] = useFormState(state => [state.curForm, state.updateForm])
+
+	const handelChange = (key: string, value: string | undefined) => {
+		updateForm(key, value || '')
+	}
+
 	return (
-		<form noValidate autoComplete='off'>
-			<FormControl sx={{ width: '25ch' }}>
-				<OutlinedInput placeholder='Please enter text' />
-				<MyFormHelperText />
-			</FormControl>
-		</form>
+		<Box
+			component='form'
+			sx={{
+				'& .MuiTextField-root': { m: 1, width: '25ch' }
+			}}
+			noValidate
+			autoComplete='off'
+		>
+			{formItemConfigs
+				.filter(config => !!config.key)
+				.map(formItemConfig => {
+					const { type, label, key } = formItemConfig
+					return (
+						<TextField
+							key={key}
+							id='outlined-required'
+							label={label}
+							defaultValue={formData[key!]}
+							type={type}
+							onChange={event => handelChange(key!, event.target.value)}
+						/>
+					)
+				})}
+		</Box>
 	)
 }

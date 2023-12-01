@@ -114,7 +114,6 @@ export function DsTable(properties: DsTableProperties) {
 			<Tooltip title='Delete'>
 				<IconButton
 					aria-label='delete'
-					className='bg-blue-500 hover:bg-blue-400'
 					onClick={() => {
 						const newData = [...data]
 						newData.splice(row.index, 1)
@@ -129,7 +128,6 @@ export function DsTable(properties: DsTableProperties) {
 		enableBottomToolbar: false,
 		renderTopToolbarCustomActions: () => (
 			<Button
-				className='bg-blue-500 hover:bg-blue-600'
 				onClick={() => {
 					onChange?.([...data, createNewData()])
 				}}

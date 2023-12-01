@@ -1,5 +1,4 @@
-import { ColumnConfig, DsField, DsTable } from 'components/table'
-import { globalPluginCore } from 'plugin'
+import { DsField, DsTable } from 'components/table'
 import useDsState from 'state/table'
 
 // import { useDsListState, useDsState } from "state/table";
@@ -7,21 +6,12 @@ import useDsState from 'state/table'
 
 // const registerList = getRegisterList();import type { ColumnConfig } from "components/type";
 
-const columnConfigs: ColumnConfig[] = [
-	{
-		key: 'fileName',
-		header: '字段名称'
-	}
-]
-for (const column of globalPluginCore.exec('addColumn')) {
-	if (column) {
-		for (const columnConfig of column) {
-			if (columnConfig.key && !columnConfigs.some(item => item.key === columnConfig.key)) {
-				columnConfigs.push(columnConfig)
-			}
-		}
-	}
-}
+// const columnConfigs: ColumnConfig[] = [
+// 	{
+// 		key: 'fileName',
+// 		header: '字段名称'
+// 	}
+// ]
 
 export function EditTable(): JSX.Element {
 	// 	const data: DsField[] = [
@@ -31,6 +21,7 @@ export function EditTable(): JSX.Element {
 	// 		}
 	// 	]
 	const [data, setData] = useDsState(state => [state.data, state.updateData])
+	const columnConfigs = useDsState(state => state.columnConfigs)
 	// const [data, setData] = useDsState((state) => [state.data, state.updateData]);
 	// const [extraParameters, setExtraParameter] = useDsState((state) => [state.extraParams, state.updateExtraParam]);
 	// const [activeTab, setActiveTab] = useDsState((state) => [state.activeTab, state.updateActiveTab]);

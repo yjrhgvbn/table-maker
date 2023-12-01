@@ -57,10 +57,7 @@
 		"@typescript-eslint/prefer-regexp-exec": "off",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/init-declarations": "off",
-		"@typescript-eslint/no-confusing-void-expression": [
-			"error",
-			{ "ignoreArrowShorthand": true }
-		],
+		"@typescript-eslint/no-confusing-void-expression": ["error", { "ignoreArrowShorthand": true }],
 		"@typescript-eslint/non-nullable-type-assertion-style": "off",
 		"@typescript-eslint/strict-boolean-expressions": "off",
 		"@typescript-eslint/no-implicit-any-catch": "off",
@@ -121,7 +118,6 @@
 		"react/jsx-no-script-url": "error",
 		"react/jsx-no-useless-fragment": "error",
 		"@typescript-eslint/no-explicit-any": "off",
-
 		"unicorn/filename-case": [
 			"error",
 			{

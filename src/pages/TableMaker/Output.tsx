@@ -1,41 +1,24 @@
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
+import { Typography } from '@mui/material'
 import Card from '@mui/material/Card'
-import CardActions from '@mui/material/CardActions'
-import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-
-const bull = (
-	<Box
-		component='span'
-		sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-	>
-		•
-	</Box>
-)
+import { globalPluginCore } from 'plugin'
+import { useEffect, useState, useTransition } from 'react'
+import useFormState from 'state/form'
+import useDsState from 'state/table'
 
 export default function BasicCard() {
+	const [, startTransition] = useTransition()
+	const data = useDsState(state => state.data)
+	const formData = useFormState(state => state.curForm)
+	const [output, setOutput] = useState('')
+	useEffect(() => {
+		startTransition(() => {
+			const responseOutput = globalPluginCore.exec('parseOutput', data, formData) || ''
+			setOutput(responseOutput)
+		})
+	}, [data, formData])
 	return (
-		<Card sx={{ minWidth: 275 }}>
-			<CardContent>
-				<Typography sx={{ fontSize: 14 }} color='text.secondary' gutterBottom>
-					Word of the Day
-				</Typography>
-				<Typography variant='h5' component='div'>
-					be{bull}nev{bull}o{bull}lent
-				</Typography>
-				<Typography sx={{ mb: 1.5 }} color='text.secondary'>
-					adjective
-				</Typography>
-				<Typography variant='body2'>
-					well meaning and kindly.
-					<br />
-					"a benevolent smile"
-				</Typography>
-			</CardContent>
-			<CardActions>
-				<Button size='small'>Learn More</Button>
-			</CardActions>
+		<Card variant='outlined' sx={{ width: '100%' }}>
+			<Typography variant='body2'>{output}</Typography>
 		</Card>
 	)
 }

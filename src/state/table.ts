@@ -1,18 +1,28 @@
-import type { DsField } from 'components/table'
+import type { ColumnConfig, DsField } from 'components/table'
+import { globalPluginCore } from 'plugin'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface DsState {
+	dataMap: Record<string, DsField[]>
 	data: DsField[]
+	columnConfigs: ColumnConfig[]
 	updateData: (data: DsField[]) => void
+	changeTable: (key: string) => void
 }
 
 export const useDsState = create(
 	persist<DsState>(
 		set => ({
+			dataMap: {},
 			data: [],
+			columnConfigs: [],
 			updateData: (data: DsField[]) => {
 				set({ data })
+			},
+			changeTable(key: string) {
+				const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
+				set({ data: this.dataMap[key] || [], columnConfigs: newColumnConfigs })
 			}
 		}),
 		{
