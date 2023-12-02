@@ -1,4 +1,5 @@
 import { ColumnConfig, DsField } from 'components/table'
+import { useCheckState } from 'state'
 import { FormItemConfig, FormValue } from 'state/form'
 
 export interface PluginConfig {
@@ -16,14 +17,11 @@ type PluginConfigExecKey = {
 }[keyof RequiredPluginConfig]
 
 class PluginCore {
-	/** current use plugin key */
-	curPluginKey?: string = ''
-
 	/** plugin map */
 	pluginMap = new Map<string, PluginConfig>()
 
 	exec<K extends PluginConfigExecKey>(pluginKey: K, ...argument: Parameters<RequiredPluginConfig[K]>) {
-		return this.execSpecify(this.curPluginKey, pluginKey, ...argument)
+		return this.execSpecify(useCheckState.getState().curPluginKey, pluginKey, ...argument)
 	}
 
 	execSpecify<K extends PluginConfigExecKey>(
@@ -43,15 +41,7 @@ class PluginCore {
 		if (!config.key) {
 			throw new Error('PluginConfig.key is required')
 		}
-		if (this.curPluginKey) this.curPluginKey = config.key
 		this.pluginMap.set(config.key, config)
-	}
-
-	change(key: string) {
-		if (!this.pluginMap.has(key)) {
-			console.warn(`PluginCore: plugin ${key} is not exist`)
-		}
-		this.curPluginKey = key
 	}
 }
 export const globalPluginCore = new PluginCore()

@@ -1,15 +1,16 @@
 import { ColumnConfigType } from 'components/table'
-import usePluginState from 'state/plugin'
-import { globalPluginCore, PluginConfig } from './core'
+import { changePlugin, useCheckState, usePluginState } from 'state'
+import { PluginConfig, globalPluginCore } from './core'
 
 export const Plugin = {
 	columnType: ColumnConfigType,
 
 	create(config: PluginConfig) {
 		globalPluginCore.add(config)
-		const { curPluginKey } = usePluginState.getState()
+		const { curPluginKey } = useCheckState.getState()
+		usePluginState.getState().addPlugin(config.key)
 		if (!curPluginKey || curPluginKey === config.key) {
-			usePluginState.getState().changePlugin(config.key)
+			changePlugin(config.key)
 		}
 	}
 }

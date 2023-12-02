@@ -1,39 +1,36 @@
-import BeachAccessIcon from '@mui/icons-material/BeachAccess'
-import ImageIcon from '@mui/icons-material/Image'
-import WorkIcon from '@mui/icons-material/Work'
-import Avatar from '@mui/material/Avatar'
+import { Delete as DeleteIcon } from '@mui/icons-material'
+import { IconButton, ListItemButton } from '@mui/material'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
 import ListItemText from '@mui/material/ListItemText'
+import { changeList, useCheckState, useListState } from 'state'
 
-export default function FolderList() {
+export function NavList() {
+	const [list, deleteList] = useListState(state => [state.list, state.delete])
+	const currentListKey = useCheckState(state => state.curListKey)
 	return (
 		<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-			<ListItem>
-				<ListItemAvatar>
-					<Avatar>
-						<ImageIcon />
-					</Avatar>
-				</ListItemAvatar>
-				<ListItemText primary='Photos' secondary='Jan 9, 2014' />
-			</ListItem>
-			<ListItem>
-				<ListItemAvatar>
-					<Avatar>
-						<WorkIcon />
-					</Avatar>
-				</ListItemAvatar>
-				<ListItemText primary='Work' secondary='Jan 7, 2014' />
-			</ListItem>
-			<ListItem>
-				<ListItemAvatar>
-					<Avatar>
-						<BeachAccessIcon />
-					</Avatar>
-				</ListItemAvatar>
-				<ListItemText primary='Vacation' secondary='July 20, 2014' />
-			</ListItem>
+			{list.map(item => {
+				const { name = '(empty name)', key } = item
+				return (
+					<ListItem
+						sx={{ minWidth: 250 }}
+						key={key}
+						secondaryAction={
+							<IconButton edge='end' aria-label='delete' onClick={() => deleteList(key)}>
+								<DeleteIcon />
+							</IconButton>
+						}
+						disablePadding
+					>
+						<ListItemButton onClick={() => changeList(key)} dense selected={key === currentListKey}>
+							<ListItemText id={key} primary={name} />
+						</ListItemButton>
+					</ListItem>
+				)
+			})}
 		</List>
 	)
 }
+
+export default NavList

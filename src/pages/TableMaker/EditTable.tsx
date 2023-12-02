@@ -1,5 +1,6 @@
 import { DsField, DsTable } from 'components/table'
-import useDsState from 'state/table'
+import { useCheckState } from 'state'
+import useTableState from 'state/table'
 
 // import { useDsListState, useDsState } from "state/table";
 // import { getRegisterList } from "./temp";
@@ -14,14 +15,9 @@ import useDsState from 'state/table'
 // ]
 
 export function EditTable(): JSX.Element {
-	// 	const data: DsField[] = [
-	// 		{
-	// 			id: '1',
-	// 			fileName: '文件名'
-	// 		}
-	// 	]
-	const [data, setData] = useDsState(state => [state.data, state.updateData])
-	const columnConfigs = useDsState(state => state.columnConfigs)
+	const [data, setData] = useTableState(state => [state.data, state.updateData])
+	const columnConfigs = useTableState(state => state.columnConfigs)
+	const currentListKey = useCheckState(state => state.curListKey)
 	// const [data, setData] = useDsState((state) => [state.data, state.updateData]);
 	// const [extraParameters, setExtraParameter] = useDsState((state) => [state.extraParams, state.updateExtraParam]);
 	// const [activeTab, setActiveTab] = useDsState((state) => [state.activeTab, state.updateActiveTab]);
@@ -38,7 +34,7 @@ export function EditTable(): JSX.Element {
 	// };
 	return (
 		<div>
-			<DsTable columnConfigs={columnConfigs} data={data} onChange={handleUpdate} />
+			<DsTable columnConfigs={columnConfigs} data={data} onChange={handleUpdate} keyPrefix={currentListKey} />
 		</div>
 	)
 

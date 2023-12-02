@@ -1,23 +1,22 @@
-import { globalPluginCore } from 'plugin'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { useFormState } from './form'
-import { useDsState } from './table'
 
 interface PluginState {
-	curPluginKey?: string
-	changePlugin: (key: string) => void
+	pluginList: { key: string; name: string }[]
+	addPlugin: (key: string) => void
 }
 
 export const usePluginState = create(
 	persist<PluginState>(
-		set => ({
-			curPluginKey: '',
-			changePlugin: (key: string) => {
-				set({ curPluginKey: key })
-				globalPluginCore.curPluginKey = key
-				useFormState.getState().changeForm(key)
-				useDsState.getState().changeTable(key)
+		(set, get) => ({
+			pluginList: [],
+			addPlugin: (key?: string, name?: string) => {
+				if (!key) return
+				const { pluginList } = get()
+				if (pluginList.findIndex(item => item.key === key) === -1) {
+					pluginList.push({ key, name: name || key })
+					set({ pluginList })
+				}
 			}
 		}),
 		{

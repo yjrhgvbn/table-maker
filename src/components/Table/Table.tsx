@@ -9,6 +9,7 @@ import { ColumnConfigType } from './types'
 interface DsTableProperties {
 	columnConfigs: ColumnConfig[]
 	data: DsField[]
+	/** the table row will no render when key value unchanged, so adding a key prefix allows the row to be re-rendered. */
 	keyPrefix?: string
 	onChange?: (data: DsField[]) => void
 }

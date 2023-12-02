@@ -118,6 +118,7 @@
 		"react/jsx-no-script-url": "error",
 		"react/jsx-no-useless-fragment": "error",
 		"@typescript-eslint/no-explicit-any": "off",
+		"unicorn/consistent-function-scoping": "off",
 		"unicorn/filename-case": [
 			"error",
 			{

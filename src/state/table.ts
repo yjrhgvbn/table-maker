@@ -3,18 +3,16 @@ import { globalPluginCore } from 'plugin'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-interface DsState {
-	dataMap: Record<string, DsField[]>
+export interface TableState {
 	data: DsField[]
 	columnConfigs: ColumnConfig[]
 	updateData: (data: DsField[]) => void
 	changeTable: (key: string) => void
 }
 
-export const useDsState = create(
-	persist<DsState>(
+export const useTableState = create(
+	persist<TableState>(
 		set => ({
-			dataMap: {},
 			data: [],
 			columnConfigs: [],
 			updateData: (data: DsField[]) => {
@@ -22,7 +20,7 @@ export const useDsState = create(
 			},
 			changeTable(key: string) {
 				const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
-				set({ data: this.dataMap[key] || [], columnConfigs: newColumnConfigs })
+				set({ columnConfigs: newColumnConfigs })
 			}
 		}),
 		{
@@ -36,4 +34,4 @@ export const useDsState = create(
 	)
 )
 
-export default useDsState
+export default useTableState

@@ -1,6 +1,7 @@
 import { globalPluginCore } from 'plugin'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
+import { useCheckState } from './check'
 
 export enum FormItemConfigType {
 	String = 'string',
@@ -16,15 +17,16 @@ export interface FormItemConfig {
 
 type FormItemValue = string | number | boolean
 export type FormValue = Record<string, FormItemValue>
-interface FormState {
+export interface FormState {
 	/** current form data */
 	curForm: FormValue
-	/** all from data, plugin key as key */
+	/** a record from data, plugin key as key */
 	data: Record<string, FormValue>
 	/** current form config */
 	formItemConfigs: FormItemConfig[]
-	updateForm: (key: string, value: FormItemValue) => void
-	updateData: (key: string, value: FormValue) => void
+	updateCurrentPluginFormItem: (key: string, value: FormItemValue) => void
+	updateCurrentPluginForm: (key: string, value: FormValue) => void
+	updateData: (value: Record<string, FormValue>) => void
 	changeForm: (key: string) => void
 }
 
@@ -34,11 +36,17 @@ export const useFormState = create(
 			curForm: {},
 			data: {},
 			formItemConfigs: [],
-			updateForm: (key: string, value: FormItemValue) => {
-				set({ curForm: { ...get().curForm, [key]: value } })
+			updateCurrentPluginFormItem: (key: string, value: FormItemValue) => {
+				const newFormData = { ...get().curForm, [key]: value }
+				set({ curForm: newFormData })
+				const { curPluginKey } = useCheckState.getState()
+				if (curPluginKey) get().updateCurrentPluginForm(curPluginKey, newFormData)
 			},
-			updateData: (key: string, value: FormValue) => {
+			updateCurrentPluginForm: (key: string, value: FormValue) => {
 				set({ data: { ...get().data, [key]: value } })
+			},
+			updateData: value => {
+				set({ data: value })
 			},
 			changeForm: (key: string) => {
 				const newFormItemConfig = (globalPluginCore.execSpecify(key, 'addFormItem') || []).filter(Boolean)
