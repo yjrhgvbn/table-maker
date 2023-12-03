@@ -1,19 +1,8 @@
 import { globalPluginCore } from 'plugin'
+import { FormItemConfig } from 'types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { useCheckState } from './check'
-
-export enum FormItemConfigType {
-	String = 'string',
-	Select = 'select',
-	Switch = 'switch'
-}
-
-export interface FormItemConfig {
-	key?: string
-	label?: string
-	type?: FormItemConfigType
-}
 
 type FormItemValue = string | number | boolean
 export type FormValue = Record<string, FormItemValue>

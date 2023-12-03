@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useFormState, useTableState } from 'state'
 
-export default function BasicCard() {
+export function Output() {
 	const [, startTransition] = useTransition()
 	const data = useTableState(state => state.data)
 	const formData = useFormState(state => state.curForm)
@@ -56,3 +56,4 @@ export default function BasicCard() {
 		</Card>
 	)
 }
+export default Output

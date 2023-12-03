@@ -18,6 +18,7 @@ export function changeList(key: string) {
 export function changePlugin(key: string) {
 	useCheckState.setState({ curPluginKey: key })
 	useFormState.getState().changeForm(key)
+	useTableState.getState().changeTable(key)
 }
 
 export function checkUnsaved() {
@@ -39,10 +40,8 @@ export function checkUnsaved() {
 }
 const checkUnsavedDebounce = debounce(checkUnsaved, 100)
 // TODO: use singel store, wrap setState to checkUnsavedDebounce
-useCheckState.subscribe((data, preData) => {
-	if (data.curListKey !== preData.curListKey) {
-		checkUnsavedDebounce()
-	}
+useCheckState.subscribe(() => {
+	checkUnsavedDebounce()
 })
 useFormState.subscribe(() => {
 	checkUnsavedDebounce()

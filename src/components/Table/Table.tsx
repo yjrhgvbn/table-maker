@@ -1,10 +1,10 @@
-import DeleteIcon from '@mui/icons-material/Delete'
+import { Delete as DeleteIcon } from '@mui/icons-material'
 import { Button, Chip, IconButton, Tooltip } from '@mui/material'
 import type { MRT_Cell, MRT_Column, MRT_ColumnDef } from 'material-react-table'
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { useCallback, useMemo } from 'react'
-import type { ColumnConfig, DsField } from './types'
-import { ColumnConfigType } from './types'
+import type { ColumnConfig, DsField } from 'types'
+import { ColumnConfigType } from 'types'
 
 interface DsTableProperties {
 	columnConfigs: ColumnConfig[]

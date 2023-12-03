@@ -1,6 +1,6 @@
-import { ColumnConfig, DsField } from 'components/table'
 import { useCheckState } from 'state'
-import { FormItemConfig, FormValue } from 'state/form'
+import { FormValue } from 'state/form'
+import { ColumnConfig, DsField, FormItemConfig } from 'types'
 
 export interface PluginConfig {
 	name?: string

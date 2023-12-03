@@ -1,11 +1,20 @@
 /// <reference types="vitest" />
 import eslintPlugin from '@nabla/vite-plugin-eslint'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
-import { analyzer } from 'vite-bundle-analyzer'
+import { readdirSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { PluginOption, defineConfig } from 'vite'
+import moduleList from 'vite-plugin-module-list'
 import { VitePWA } from 'vite-plugin-pwa'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
+const files = readdirSync('./plugin')
+
+const filesObject: Record<string, string> = {}
+for (const file of files) {
+	if (file !== 'index.ts') filesObject[`plugin/${file}`] = `./plugin/${file}`
+}
 export default defineConfig(({ mode }) => ({
 	test: {
 		css: false,
@@ -20,9 +29,32 @@ export default defineConfig(({ mode }) => ({
 			reportsDirectory: 'coverage'
 		}
 	},
+	build: {
+		rollupOptions: {
+			input: {
+				a: 'index.html',
+				...filesObject
+			},
+			output: {
+				manualChunks: {
+					react: ['react', 'react-dom', 'react-router-dom'],
+					material: ['@mui/material', '@mui/icons-material', '@mui/x-date-pickers']
+				}
+			}
+		}
+	},
 	plugins: [
 		tsconfigPaths(),
 		react(),
+		moduleList({
+			rootPath: resolve('plugin'),
+			outputPath: resolve('src/plugin/preset.ts'),
+			includeExtensions: ['ts'],
+			mode: {
+				language: 'ts',
+				dynamic: true
+			}
+		}),
 		...(mode === 'test'
 			? []
 			: [
@@ -47,7 +79,12 @@ export default defineConfig(({ mode }) => ({
 							]
 						}
 					}),
-					analyzer()
+					visualizer({
+						template: 'treemap',
+						open: false,
+						gzipSize: true,
+						filename: 'analyse.html'
+					}) as PluginOption
 			  ])
 	]
 }))

@@ -1,7 +1,7 @@
 import { Box, TextField } from '@mui/material'
 import { useCheckState, useFormState } from 'state'
 
-export default function UseFormControl() {
+export function Form() {
 	const [formItemConfigs] = useFormState(state => [state.formItemConfigs])
 	const [formData, updateForm] = useFormState(state => [state.curForm, state.updateCurrentPluginFormItem])
 	const currentPluginKey = useCheckState(state => state.curPluginKey) || ''
@@ -37,3 +37,4 @@ export default function UseFormControl() {
 		</Box>
 	)
 }
+export default Form

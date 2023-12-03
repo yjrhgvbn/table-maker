@@ -1,5 +1,5 @@
-import { ColumnConfigType } from 'components/table'
-import { FormItemConfigType, changePlugin, useCheckState, usePluginState } from 'state'
+import { changePlugin, useCheckState, usePluginState } from 'state'
+import { ColumnConfigType, FormItemConfigType } from 'types'
 import { PluginConfig, globalPluginCore } from './core'
 
 export const Plugin = {
@@ -15,4 +15,11 @@ export const Plugin = {
 		}
 	}
 }
+declare global {
+	interface Window {
+		__table_plugin__: typeof Plugin
+	}
+}
+// eslint-disable-next-line no-underscore-dangle
+window.__table_plugin__ = Plugin
 export default Plugin

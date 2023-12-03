@@ -1,5 +1,5 @@
-import type { ColumnConfig, DsField } from 'components/table'
 import { globalPluginCore } from 'plugin'
+import type { ColumnConfig, DsField } from 'types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 

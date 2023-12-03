@@ -1,6 +1,7 @@
-import { DsField, DsTable } from 'components/table'
+import { DsTable } from 'components/table'
 import { useCheckState } from 'state'
 import useTableState from 'state/table'
+import { DsField } from 'types'
 
 // import { useDsListState, useDsState } from "state/table";
 // import { getRegisterList } from "./temp";

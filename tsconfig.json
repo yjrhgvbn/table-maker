@@ -16,6 +16,6 @@
 		"noImplicitAny": false,
 		"types": ["vite/client", "vitest/globals"]
 	},
-	"include": ["src"],
+	"include": ["src", "plugin"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,17 +1,17 @@
-import { Plugin } from 'plugin/plugin'
+import { Plugin } from './index'
 
 Plugin.create({
-	key: 'curl',
-	name: 'curl change',
+	key: 'md',
+	name: 'md export',
 	addColumn() {
 		return [
 			{
 				key: 'key',
-				header: '请求头'
+				header: '请求头-md'
 			},
 			{
 				key: 'value',
-				header: '请求头值'
+				header: '请求头值-md'
 			}
 		]
 	},
@@ -25,6 +25,6 @@ Plugin.create({
 		]
 	},
 	parseOutput(data, formData) {
-		return `${JSON.stringify(data)}\n${JSON.stringify(formData)}`
+		return `${JSON.stringify(data)}\n 123 ${JSON.stringify(formData)}`
 	}
 })
