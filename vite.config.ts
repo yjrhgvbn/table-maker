@@ -2,6 +2,7 @@
 import eslintPlugin from '@nabla/vite-plugin-eslint'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { analyzer } from 'vite-bundle-analyzer'
 import { VitePWA } from 'vite-plugin-pwa'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -28,12 +29,7 @@ export default defineConfig(({ mode }) => ({
 					eslintPlugin(),
 					VitePWA({
 						registerType: 'autoUpdate',
-						includeAssets: [
-							'favicon.png',
-							'robots.txt',
-							'apple-touch-icon.png',
-							'icons/*.svg',
-						],
+						includeAssets: ['favicon.png', 'robots.txt', 'apple-touch-icon.png', 'icons/*.svg'],
 						manifest: {
 							theme_color: '#BD34FE',
 							icons: [
@@ -50,7 +46,8 @@ export default defineConfig(({ mode }) => ({
 								}
 							]
 						}
-					})
+					}),
+					analyzer()
 			  ])
 	]
 }))

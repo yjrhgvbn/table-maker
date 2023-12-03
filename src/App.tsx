@@ -1,5 +1,4 @@
 import LoadingOrError from 'components/LoadingOrError'
-import { ConfirmProvider } from 'material-ui-confirm'
 import Home from 'pages/TableMaker'
 import type { ReactElement } from 'react'
 import { Suspense } from 'react'
@@ -8,14 +7,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 export default function App(): ReactElement {
 	return (
-		<ConfirmProvider>
-			<BrowserRouter>
-				<Suspense fallback={<LoadingOrError />}>
-					<Routes>
-						<Route path='/' element={<Home />} />
-					</Routes>
-				</Suspense>
-			</BrowserRouter>
-		</ConfirmProvider>
+		<BrowserRouter>
+			<Suspense fallback={<LoadingOrError />}>
+				<Routes>
+					<Route path='/' element={<Home />} />
+				</Routes>
+			</Suspense>
+		</BrowserRouter>
 	)
 }

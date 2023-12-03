@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash'
+import { cloneDeep } from 'lodash-es'
 import { nanoid } from 'nanoid'
 import { FormState, TableState, changeList, useCheckState, useFormState, useTableState } from 'state'
 import { create } from 'zustand'
@@ -23,6 +23,7 @@ interface ListState {
 	 */
 	save: (paramete?: { key?: string; name?: string; table?: TableState['data']; plugin?: FormState['data'] }) => void
 	delete: (key: string) => void
+	getDate: (key?: string) => ListState['list'][0] | undefined
 }
 
 export const useListState = create(
@@ -31,7 +32,7 @@ export const useListState = create(
 			list: [],
 			create: () => {
 				const key = nanoid()
-				set({ list: [...get().list, { key, name: `未命名${get().list.length + 1}`, table: [], plugin: {}, updateTime: Date.now() }] })
+				set({ list: [{ key, name: `未命名${get().list.length + 1}`, table: [], plugin: {}, updateTime: Date.now() }, ...get().list] })
 				changeList(key)
 			},
 			save: (parameter = {}) => {
@@ -39,16 +40,17 @@ export const useListState = create(
 				const key = keyParameter || useCheckState.getState().curListKey || nanoid()
 				const table = tableParameter || useTableState.getState().data || []
 				const plugin = pluginParameter || useFormState.getState().data || {}
-				const name = nameParameter || `未命名${get().list.length + 1}`
+				const name = nameParameter || useCheckState.getState().curListName || `未命名${get().list.length + 1}`
 				const { list } = get()
 				const index = list.findIndex(item => item.key === key)
-				const newListItem = { name, key, table, plugin, updateTime: Date.now() }
+				const newListItem = { name, key, table: cloneDeep(table), plugin: cloneDeep(plugin), updateTime: Date.now() }
 				if (index === -1) {
 					list.push(newListItem)
 				} else {
 					list[index] = newListItem
 				}
 				set({ list: [...list] })
+				useCheckState.setState({ isToSave: false })
 			},
 			delete: (key: string) => {
 				const { list } = get()
@@ -59,6 +61,15 @@ export const useListState = create(
 				}
 				list.splice(index, 1)
 				set({ list })
+			},
+			getDate: (key?: string) => {
+				const defaultKey = key || useCheckState.getState().curListKey
+				const { list } = get()
+				const index = list.findIndex(item => item.key === defaultKey)
+				if (index >= 0) {
+					return list[index]
+				}
+				return undefined
 			}
 		}),
 
@@ -70,18 +81,4 @@ export const useListState = create(
 	)
 )
 
-export function verifyToSave() {
-	const { curListKey } = useCheckState.getState()
-	if (!curListKey) {
-		console.warn('save list error: curListKey is empty')
-		return false
-	}
-	const { table, plugin } = useListState.getState().list.find(item => item.key === curListKey) || {}
-	const toSavePlugin = useFormState.getState().data
-	const toSaveTable = useTableState.getState().data
-	if (isEqual(toSavePlugin, plugin) && isEqual(toSaveTable, table)) {
-		return true
-	}
-	return false
-}
 export default useListState

@@ -1,13 +1,17 @@
 import { Button, Input, Stack, Tab, Tabs } from '@mui/material'
 import clsx from 'clsx'
+import { useHotkeys } from 'react-hotkeys-hook'
 import { changePlugin, useCheckState, useListState } from 'state'
 import usePluginState from 'state/plugin'
 
 export function Head() {
 	const [creteNewList, saveToList] = useListState(state => [state.create, state.save])
 	const [pluginList] = usePluginState(state => [state.pluginList])
-	const currentPluginKey = useCheckState(state => state.curPluginKey)
+	const [currentPluginKey, isToSave] = useCheckState(state => [state.curPluginKey, state.isToSave])
 	const [currentListName, updateName] = useCheckState(state => [state.curListName, state.updateName])
+	useHotkeys('mod+s,ctrl+s', () => saveToList(), {
+		preventDefault: true
+	})
 
 	const handelTabChange = (_: any, value: any) => {
 		changePlugin(value)
@@ -28,6 +32,7 @@ export function Head() {
 				</Button>
 				<Button variant='outlined' onClick={() => saveToList()}>
 					保存
+					{isToSave && '*'}
 				</Button>
 			</Stack>
 		</Stack>

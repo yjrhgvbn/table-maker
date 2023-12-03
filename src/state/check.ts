@@ -5,6 +5,7 @@ interface CheckState {
 	curPluginKey?: string
 	curListKey?: string
 	curListName?: string
+	isToSave?: boolean
 	updateName: (name: string) => void
 }
 
@@ -14,6 +15,7 @@ export const useCheckState = create(
 			curListKey: '',
 			curPluginKey: '',
 			curListName: '',
+			isToSave: false,
 			updateName: (name: string) => {
 				set({ curListName: name })
 			}

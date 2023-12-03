@@ -1,9 +1,10 @@
 import { ColumnConfigType } from 'components/table'
-import { changePlugin, useCheckState, usePluginState } from 'state'
+import { FormItemConfigType, changePlugin, useCheckState, usePluginState } from 'state'
 import { PluginConfig, globalPluginCore } from './core'
 
 export const Plugin = {
 	columnType: ColumnConfigType,
+	formItemConfigType: FormItemConfigType,
 
 	create(config: PluginConfig) {
 		globalPluginCore.add(config)

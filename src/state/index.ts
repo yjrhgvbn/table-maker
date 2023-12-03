@@ -1,3 +1,4 @@
+import { debounce, isEqual } from 'lodash-es'
 import { useCheckState } from './check'
 import { useFormState } from './form'
 import { useListState } from './list'
@@ -19,6 +20,36 @@ export function changePlugin(key: string) {
 	useFormState.getState().changeForm(key)
 }
 
+export function checkUnsaved() {
+	const { curListKey, curListName, isToSave } = useCheckState.getState()
+	if (!curListKey) {
+		console.warn('save list error: curListKey is empty')
+		return false
+	}
+	const { table, plugin, name } = useListState.getState().list.find(item => item.key === curListKey) || {}
+	const toSavePlugin = useFormState.getState().data
+	const toSaveTable = useTableState.getState().data
+
+	if (curListName !== name || !isEqual(toSavePlugin, plugin) || !isEqual(toSaveTable, table)) {
+		if (!isToSave) useCheckState.setState({ isToSave: true })
+	} else if (isToSave) {
+		useCheckState.setState({ isToSave: false })
+	}
+	return false
+}
+const checkUnsavedDebounce = debounce(checkUnsaved, 100)
+// TODO: use singel store, wrap setState to checkUnsavedDebounce
+useCheckState.subscribe((data, preData) => {
+	if (data.curListKey !== preData.curListKey) {
+		checkUnsavedDebounce()
+	}
+})
+useFormState.subscribe(() => {
+	checkUnsavedDebounce()
+})
+useTableState.subscribe(() => {
+	checkUnsavedDebounce()
+})
 export * from './check'
 export * from './form'
 export * from './list'

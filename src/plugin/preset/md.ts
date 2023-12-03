@@ -1,5 +1,4 @@
 import { Plugin } from 'plugin/plugin'
-import { FormItemConfigType } from 'state/form'
 
 Plugin.create({
 	key: 'md',
@@ -21,7 +20,7 @@ Plugin.create({
 			{
 				key: 'authorization',
 				label: '认证信息',
-				type: FormItemConfigType.String
+				type: Plugin.formItemConfigType.String
 			}
 		]
 	},
