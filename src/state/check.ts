@@ -1,5 +1,4 @@
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { createSlice } from './middleware'
 
 interface CheckState {
 	curPluginKey?: string
@@ -8,22 +7,18 @@ interface CheckState {
 	isToSave?: boolean
 	updateName: (name: string) => void
 }
+declare module 'state/middleware/type' {
+	interface StateMutators {
+		checkState: CheckState
+	}
+}
 
-export const useCheckState = create(
-	persist<CheckState>(
-		set => ({
-			curListKey: '',
-			curPluginKey: '',
-			curListName: '',
-			isToSave: false,
-			updateName: (name: string) => {
-				set({ curListName: name })
-			}
-		}),
-		{
-			name: 'table-check-storage',
-			storage: createJSONStorage(() => localStorage)
-		}
-	)
-)
-export default useCheckState
+createSlice<CheckState>(set => ({
+	curListKey: '',
+	curPluginKey: '',
+	curListName: '',
+	isToSave: false,
+	updateName: (name: string) => {
+		set({ curListName: name })
+	}
+}))

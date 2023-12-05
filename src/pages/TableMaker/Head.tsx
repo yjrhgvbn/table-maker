@@ -1,14 +1,13 @@
 import { Button, Input, Stack, Tab, Tabs } from '@mui/material'
 import clsx from 'clsx'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { changePlugin, useCheckState, useListState } from 'state'
-import usePluginState from 'state/plugin'
+import { changePlugin, useStore } from 'state'
 
 export function Head() {
-	const [creteNewList, saveToList] = useListState(state => [state.create, state.save])
-	const [pluginList] = usePluginState(state => [state.pluginList])
-	const [currentPluginKey, isToSave] = useCheckState(state => [state.curPluginKey, state.isToSave])
-	const [currentListName, updateName] = useCheckState(state => [state.curListName, state.updateName])
+	const [creteNewList, saveToList] = useStore(state => [state.create, state.save])
+	const [pluginList] = useStore(state => [state.pluginList])
+	const [currentPluginKey, isToSave] = useStore(state => [state.curPluginKey, state.isToSave])
+	const [currentListName, updateName] = useStore(state => [state.curListName, state.updateName])
 	useHotkeys('mod+s,ctrl+s', () => saveToList(), {
 		preventDefault: true
 	})

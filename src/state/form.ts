@@ -1,8 +1,6 @@
 import { globalPluginCore } from 'plugin'
 import { FormItemConfig } from 'types'
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
-import { useCheckState } from './check'
+import { createSlice } from './middleware'
 
 type FormItemValue = string | number | boolean
 export type FormValue = Record<string, FormItemValue>
@@ -10,7 +8,7 @@ export interface FormState {
 	/** current form data */
 	curForm: FormValue
 	/** a record from data, plugin key as key */
-	data: Record<string, FormValue>
+	formData: Record<string, FormValue>
 	/** current form config */
 	formItemConfigs: FormItemConfig[]
 	updateCurrentPluginFormItem: (key: string, value: FormItemValue) => void
@@ -19,34 +17,30 @@ export interface FormState {
 	changeForm: (key: string) => void
 }
 
-export const useFormState = create(
-	persist<FormState>(
-		(set, get) => ({
-			curForm: {},
-			data: {},
-			formItemConfigs: [],
-			updateCurrentPluginFormItem: (key: string, value: FormItemValue) => {
-				const newFormData = { ...get().curForm, [key]: value }
-				set({ curForm: newFormData })
-				const { curPluginKey } = useCheckState.getState()
-				if (curPluginKey) get().updateCurrentPluginForm(curPluginKey, newFormData)
-			},
-			updateCurrentPluginForm: (key: string, value: FormValue) => {
-				set({ data: { ...get().data, [key]: value } })
-			},
-			updateData: value => {
-				set({ data: value })
-			},
-			changeForm: (key: string) => {
-				const newFormItemConfig = (globalPluginCore.execSpecify(key, 'addFormItem') || []).filter(Boolean)
-				set({ curForm: get().data[key] || {}, formItemConfigs: newFormItemConfig })
-			}
-		}),
-		{
-			name: 'table-form-storage',
-			storage: createJSONStorage(() => localStorage)
-		}
-	)
-)
+declare module 'state/middleware/type' {
+	interface StateMutators {
+		FormState: FormState
+	}
+}
 
-export default useFormState
+createSlice<FormState>((set, get) => ({
+	curForm: {},
+	formData: {},
+	formItemConfigs: [],
+	updateCurrentPluginFormItem: (key: string, value: FormItemValue) => {
+		const newFormData = { ...get().curForm, [key]: value }
+		set({ curForm: newFormData })
+		const { curPluginKey } = get()
+		if (curPluginKey) get().updateCurrentPluginForm(curPluginKey, newFormData)
+	},
+	updateCurrentPluginForm: (key: string, value: FormValue) => {
+		set({ formData: { ...get().formData, [key]: value } })
+	},
+	updateData: value => {
+		set({ formData: value })
+	},
+	changeForm: (key: string) => {
+		const newFormItemConfig = (globalPluginCore.execSpecify(key, 'addFormItem') || []).filter(Boolean)
+		set({ curForm: get().formData[key] || {}, formItemConfigs: newFormItemConfig })
+	}
+}))

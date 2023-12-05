@@ -1,37 +1,28 @@
 import { globalPluginCore } from 'plugin'
 import type { ColumnConfig, DsField } from 'types'
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { createSlice } from './middleware'
 
 export interface TableState {
-	data: DsField[]
+	tableData: DsField[]
 	columnConfigs: ColumnConfig[]
 	updateData: (data: DsField[]) => void
 	changeTable: (key: string) => void
 }
 
-export const useTableState = create(
-	persist<TableState>(
-		set => ({
-			data: [],
-			columnConfigs: [],
-			updateData: (data: DsField[]) => {
-				set({ data })
-			},
-			changeTable(key: string) {
-				const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
-				set({ columnConfigs: newColumnConfigs })
-			}
-		}),
-		{
-			name: 'table-data-storage', // name of the item in the storage (must be unique)
-			storage: createJSONStorage(() => localStorage) // (optional) by default, 'localStorage' is used
-			// merge: (persistedState:DsState | null, currentState:DsState) => {
+declare module 'state/middleware/type' {
+	interface StateMutators {
+		TableState: TableState
+	}
+}
 
-			//   return { ...currentState, ...persistedState };
-			// },
-		}
-	)
-)
-
-export default useTableState
+createSlice<TableState>(set => ({
+	tableData: [],
+	columnConfigs: [],
+	updateData: (data: DsField[]) => {
+		set({ tableData: data })
+	},
+	changeTable(key: string) {
+		const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
+		set({ columnConfigs: newColumnConfigs })
+	}
+}))

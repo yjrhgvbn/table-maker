@@ -1,10 +1,10 @@
 import { Box, TextField } from '@mui/material'
-import { useCheckState, useFormState } from 'state'
+import { useStore } from 'state'
 
 export function Form() {
-	const [formItemConfigs] = useFormState(state => [state.formItemConfigs])
-	const [formData, updateForm] = useFormState(state => [state.curForm, state.updateCurrentPluginFormItem])
-	const currentPluginKey = useCheckState(state => state.curPluginKey) || ''
+	const [formItemConfigs] = useStore(state => [state.formItemConfigs])
+	const [formData, updateForm] = useStore(state => [state.curForm, state.updateCurrentPluginFormItem])
+	const currentPluginKey = useStore(state => state.curPluginKey) || ''
 
 	const handelChange = (key: string, value: string | undefined) => {
 		updateForm(key, value || '')

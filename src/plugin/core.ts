@@ -1,4 +1,4 @@
-import { useCheckState } from 'state'
+import { useStore } from 'state'
 import { FormValue } from 'state/form'
 import { ColumnConfig, DsField, FormItemConfig } from 'types'
 
@@ -21,7 +21,7 @@ class PluginCore {
 	pluginMap = new Map<string, PluginConfig>()
 
 	exec<K extends PluginConfigExecKey>(pluginKey: K, ...argument: Parameters<RequiredPluginConfig[K]>) {
-		return this.execSpecify(useCheckState.getState().curPluginKey, pluginKey, ...argument)
+		return this.execSpecify(useStore.getState().curPluginKey, pluginKey, ...argument)
 	}
 
 	execSpecify<K extends PluginConfigExecKey>(

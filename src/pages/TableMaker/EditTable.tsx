@@ -1,6 +1,5 @@
 import { DsTable } from 'components/table'
-import { useCheckState } from 'state'
-import useTableState from 'state/table'
+import { useStore } from 'state'
 import { DsField } from 'types'
 
 // import { useDsListState, useDsState } from "state/table";
@@ -16,9 +15,9 @@ import { DsField } from 'types'
 // ]
 
 export function EditTable(): JSX.Element {
-	const [data, setData] = useTableState(state => [state.data, state.updateData])
-	const columnConfigs = useTableState(state => state.columnConfigs)
-	const currentListKey = useCheckState(state => state.curListKey)
+	const [data, setData] = useStore(state => [state.tableData, state.updateData])
+	const columnConfigs = useStore(state => state.columnConfigs)
+	const currentListKey = useStore(state => state.curListKey)
 	// const [data, setData] = useDsState((state) => [state.data, state.updateData]);
 	// const [extraParameters, setExtraParameter] = useDsState((state) => [state.extraParams, state.updateExtraParam]);
 	// const [activeTab, setActiveTab] = useDsState((state) => [state.activeTab, state.updateActiveTab]);

@@ -2,10 +2,8 @@
 import eslintPlugin from '@nabla/vite-plugin-eslint'
 import react from '@vitejs/plugin-react'
 import { readdirSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { visualizer } from 'rollup-plugin-visualizer'
 import { PluginOption, defineConfig } from 'vite'
-import moduleList from 'vite-plugin-module-list'
 import { VitePWA } from 'vite-plugin-pwa'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -46,15 +44,6 @@ export default defineConfig(({ mode }) => ({
 	plugins: [
 		tsconfigPaths(),
 		react(),
-		moduleList({
-			rootPath: resolve('plugin'),
-			outputPath: resolve('src/plugin/preset.ts'),
-			includeExtensions: ['ts'],
-			mode: {
-				language: 'ts',
-				dynamic: true
-			}
-		}),
 		...(mode === 'test'
 			? []
 			: [

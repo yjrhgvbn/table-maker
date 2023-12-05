@@ -1,12 +1,9 @@
 import './plugin'
 
-import list from './preset'
-
 export * from './core'
 
-for (const { module } of list) {
+// mock async import
+const modules = import.meta.glob(['./*.ts', '!./index.ts'])
+for (const module of Object.values(modules)) {
 	module()
 }
-// mock async import
-// import('../../plugin/curl')
-// import('../../plugin/md')

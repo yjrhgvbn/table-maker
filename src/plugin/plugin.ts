@@ -1,4 +1,4 @@
-import { changePlugin, useCheckState, usePluginState } from 'state'
+import { changePlugin, useStore } from 'state'
 import { ColumnConfigType, FormItemConfigType } from 'types'
 import { PluginConfig, globalPluginCore } from './core'
 
@@ -8,8 +8,8 @@ export const Plugin = {
 
 	create(config: PluginConfig) {
 		globalPluginCore.add(config)
-		const { curPluginKey } = useCheckState.getState()
-		usePluginState.getState().addPlugin(config.key)
+		const { curPluginKey } = useStore.getState()
+		useStore.getState().addPlugin(config.key)
 		if (!curPluginKey || curPluginKey === config.key) {
 			changePlugin(config.key)
 		}

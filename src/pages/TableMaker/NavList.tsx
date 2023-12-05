@@ -3,11 +3,11 @@ import { IconButton, ListItemButton } from '@mui/material'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import { changeList, useCheckState, useListState } from 'state'
+import { changeList, useStore } from 'state'
 
 export function NavList() {
-	const [list, deleteList] = useListState(state => [state.list, state.delete])
-	const currentListKey = useCheckState(state => state.curListKey)
+	const [list, deleteList] = useStore(state => [state.list, state.delete])
+	const currentListKey = useStore(state => state.curListKey)
 	return (
 		<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
 			{list.map(item => {

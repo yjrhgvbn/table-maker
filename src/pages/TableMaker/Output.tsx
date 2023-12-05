@@ -4,12 +4,12 @@ import Card from '@mui/material/Card'
 import { globalPluginCore } from 'plugin'
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
-import { useFormState, useTableState } from 'state'
+import { useStore } from 'state'
 
 export function Output() {
 	const [, startTransition] = useTransition()
-	const data = useTableState(state => state.data)
-	const formData = useFormState(state => state.curForm)
+	const data = useStore(state => state.tableData)
+	const formData = useStore(state => state.curForm)
 	const [output, setOutput] = useState('')
 	const [copiedTimer, setCopiedTimer] = useState<null | number>(null)
 	const [enabled, setEnabled] = useState(false)
