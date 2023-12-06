@@ -14,23 +14,10 @@ for (const file of files) {
 	if (file !== 'index.ts') filesObject[`plugin/${file}`] = `./plugin/${file}`
 }
 export default defineConfig(({ mode }) => ({
-	test: {
-		css: false,
-		globals: true,
-		environment: 'jsdom',
-		clearMocks: true,
-		coverage: {
-			provider: 'istanbul',
-			enabled: true,
-			'100': true,
-			reporter: ['text', 'lcov'],
-			reportsDirectory: 'coverage'
-		}
-	},
 	build: {
 		rollupOptions: {
 			input: {
-				a: 'index.html',
+				index: 'index.html',
 				...filesObject
 			},
 			output: {

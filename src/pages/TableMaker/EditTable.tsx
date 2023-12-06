@@ -1,4 +1,4 @@
-import { DsTable } from 'components/table'
+import { DsTable } from 'components/Table'
 import { useStore } from 'state'
 import { DsField } from 'types'
 
