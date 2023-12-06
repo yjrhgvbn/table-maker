@@ -1,11 +1,25 @@
+import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
 import { Badge, Button, Input, Stack, Tab, Tabs } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import clsx from 'clsx'
 import { globalPluginCore } from 'plugin'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { changePlugin, useStore } from 'state'
+import loadLocalScript from 'utils/load'
 import { ImportModal } from './ImportModal'
 
+const VisuallyHiddenInput = styled('input')({
+	clip: 'rect(0 0 0 0)',
+	clipPath: 'inset(50%)',
+	height: 1,
+	overflow: 'hidden',
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	whiteSpace: 'nowrap',
+	width: 1
+})
 export function Head() {
 	const [creteNewList, saveToList] = useStore(state => [state.create, state.save])
 	const [pluginList] = useStore(state => [state.pluginList])
@@ -27,6 +41,11 @@ export function Head() {
 		}
 		setOpenImport(false)
 	}
+	const importLocalFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+		loadLocalScript(file)
+	}
 
 	return (
 		<>
@@ -38,6 +57,12 @@ export function Head() {
 				</Tabs>
 				<Stack spacing={2} direction='row'>
 					<Input placeholder='列表名' value={currentListName} onChange={event => updateName(event.target.value)} />
+
+					<Button component='label' variant='contained' startIcon={<CloudUploadIcon />}>
+						导入本地脚本
+						<VisuallyHiddenInput type='file' onChange={importLocalFile} />
+					</Button>
+
 					<Button variant='contained' onClick={() => setOpenImport(!openImport)}>
 						导入
 					</Button>
