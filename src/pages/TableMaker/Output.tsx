@@ -49,7 +49,7 @@ export function Output() {
 						{copiedTimer ? <LibraryAddCheck fontSize='inherit' /> : <ContentCopyRounded fontSize='inherit' />}
 					</IconButton>
 				</div>
-				<Typography variant='subtitle1' gutterBottom className='whitespace-pre-wrap'>
+				<Typography variant='subtitle1' gutterBottom className='min-h-[10rem] whitespace-pre-wrap'>
 					{output}
 				</Typography>
 			</div>

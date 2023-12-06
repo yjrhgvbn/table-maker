@@ -2,8 +2,7 @@ import './plugin'
 
 export * from './core'
 
-// mock async import
-const modules = import.meta.glob(['./*.ts', '!./index.ts'])
+const modules = import.meta.glob(['../../plugin/*.ts', '!../../plugin/index.ts'])
 for (const module of Object.values(modules)) {
 	module()
 }

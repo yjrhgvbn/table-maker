@@ -7,6 +7,7 @@ export interface PluginConfig {
 	key: string
 	addColumn?: () => ColumnConfig[]
 	addFormItem?: () => FormItemConfig[]
+	parseImport?: (data: string) => DsField[]
 	parseOutput?: (data: DsField[], formData: FormValue) => string
 }
 

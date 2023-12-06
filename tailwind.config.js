@@ -5,7 +5,7 @@ const config = {
 	corePlugins: {
 		preflight: false
 	},
-	important: '#root',
+	// important: '#root',
 	content: ['index.html', 'src/**/*.tsx'],
 	theme: {
 		fontFamily: {

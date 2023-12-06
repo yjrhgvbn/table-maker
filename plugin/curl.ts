@@ -26,5 +26,14 @@ Plugin.create({
 	},
 	parseOutput(data, formData) {
 		return `${JSON.stringify(data)}\n${JSON.stringify(formData)}`
+	},
+	parseImport(data) {
+		return [
+			{
+				id: 'test',
+				key: data,
+				value: 'test'
+			}
+		]
 	}
 })
