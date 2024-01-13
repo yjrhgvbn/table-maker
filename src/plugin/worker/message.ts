@@ -22,9 +22,12 @@ export class WorkerMessage<T = any, S = any> {
 
 	#cbList: ((response: T | null) => void)[] = []
 
-	constructor(key: ActionKeys, sendMessage: S) {
+	config: { timeout?: number } = {}
+
+	constructor(key: ActionKeys, sendMessage: S, config?: { timeout?: number }) {
 		this.eventKey = key
 		this.sendMessage = sendMessage
+		this.config = config || { timeout: 3000 }
 	}
 
 	on(callback: (response: T | null) => void) {

@@ -33,7 +33,7 @@ export function Head() {
 	const handelTabChange = (_: any, value: any) => {
 		changePlugin(value)
 	}
-	const handleImport = (data: string) => {
+	const handleImport = () => {
 		const result = ''
 		if (result) {
 			updateData(result)

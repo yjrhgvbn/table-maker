@@ -1,4 +1,5 @@
-import { addPlugin } from 'plugin/worker/plugin'
+import { addPlugin, execPlugin, getPluginList } from 'plugin/worker/plugin'
+import { ActionKeys } from './interface'
 
 // const interval = () => {
 // 	timer = setInterval(() => {
@@ -10,28 +11,54 @@ import { addPlugin } from 'plugin/worker/plugin'
 // }
 
 // onmessage = function (event) {
-// 	console.log('🚀 ~ event:', event)
 // }
+let resolveLoadPresetPlugin: (value?: any) => void
+const loadPresetPluginPromise = new Promise(r => {
+	resolveLoadPresetPlugin = r
+})
+async function loadPresetPlugin() {
+	const modules = import.meta.glob(['../../../plugin/*.ts', '!../../../plugin/interface.ts'])
+	const loadFunctionList = Object.values(modules).map(module => module())
 
-onmessage = function () {
-	// console.log('Worker: Message received from main script')
-	// const result = e.data[0] * e.data[1]
-	// if (result) {
-	// 	postMessage('Please write two numbers')
-	// } else {
-	// 	const workerResult = `Result: ${result}`
-	// 	console.log('Worker: Posting message back to main script')
-	// 	postMessage(workerResult)
-	// }
+	const moduleResloveList: any[] = await Promise.all(loadFunctionList)
+	for (const plugin of moduleResloveList) {
+		addPlugin(plugin.default)
+	}
+	resolveLoadPresetPlugin()
 }
-function loadPresetPlugin() {
-	const modules = import.meta.glob(['../../plugin/*.ts', '!../../plugin/index.ts'])
-	for (const module of Object.values(modules)) {
-		module().then((m: any) => {
-			if (m.default) {
-				addPlugin(m.default)
-			}
-		})
+
+function postMessageBack(event: MessageEvent<MessageDataType>, message: any) {
+	postMessage({ eventKey: event.data.eventKey, id: event.data.id, message })
+}
+
+type MessageDataType = { eventKey: ActionKeys; id: string; message: any }
+function handlePluginMessage(event: MessageEvent<MessageDataType>) {
+	const { data } = event
+	const { eventKey, message } = data
+	switch (eventKey) {
+		case 'getPluginList': {
+			postMessageBack(event, getPluginList())
+			break
+		}
+		case 'addColumn':
+		case 'addFormItem': {
+			new Promise(resolve => {
+				resolve(execPlugin(message, eventKey))
+			}).then(response => {
+				postMessageBack(event, response)
+			})
+
+			break
+		}
+		default: {
+			postMessageBack(event, null)
+			break
+		}
 	}
 }
-loadPresetPlugin()
+onmessage = function (event: MessageEvent<MessageDataType>) {
+	loadPresetPluginPromise.then(() => {
+		handlePluginMessage(event)
+	})
+}
+await loadPresetPlugin()

@@ -1,8 +1,8 @@
-import { FormItemConfig } from 'plugin/interface'
 import { FormValue } from 'state'
 import { ColumnConfig, DsField } from 'types'
+import { FormItemConfig } from '../interface'
 
-export type ActionKeys = 'addColumn' | 'addFormItem' | 'parseImport' | 'parseOutput' | 'getPluginList' | 'getPluginConfig'
+export type ActionKeys = 'addColumn' | 'addFormItem' | 'parseImport' | 'parseOutput' | 'getPluginList' | 'loadPresetPlugin'
 
 type PromiseOrNot<T> = T | Promise<T>
 export type AddColumnType = () => PromiseOrNot<ColumnConfig[]>

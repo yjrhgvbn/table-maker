@@ -38,15 +38,6 @@ export function addPlugin(config: PluginConfig) {
 	}
 }
 
-// export async function loadPlugin(url: string) {
-// 	try {
-// 		const module = await import(url)
-// 		addPlugin(module.default)
-// 	} catch (error) {
-// 		console.error(error)
-// 	}
-// }
-
 // 获取 CostomPlugin中所有 函数方法的名称，排查基本类型
 type RequiredCostomPluginFunction = Required<CostomPlugin>
 type PluginConfigExecKey = {
@@ -61,25 +52,6 @@ export function execPlugin<K extends PluginConfigExecKey>(pluginKey: string, eve
 	return plugin[eventName]?.(...argument)
 }
 
-// export const Plugin = {
-// 	columnType: ColumnConfigType,
-// 	formItemConfigType: FormItemConfigType,
-
-// 	create(config: PluginConfig) {
-// 		globalPluginCore.add(config)
-// 		const { curPluginKey } = useStore.getState()
-// 		useStore.getState().addPlugin(config.key)
-// 		if (!curPluginKey || curPluginKey === config.key) {
-// 			changePlugin(config.key)
-// 		}
-// 	}
-// }
-// declare global {
-// 	interface Window {
-// 		addPlugin: typeof addPlugin
-// 	}
-// }
-// window.addPlugin = addPlugin
-// eslint-disable-next-line no-underscore-dangle
-// window.__table_plugin__ = Plugin
-// export default Plugin
+export function getPluginList() {
+	return [...pluginMap.values()].map(plugin => ({ key: plugin.key, name: plugin.name }))
+}

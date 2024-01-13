@@ -1,12 +1,10 @@
-import { ActionKeys } from './interface'
+import type { ActionKeys } from './interface'
 import { WorkerMessage } from './message'
 
 export class MessageManager {
 	waitResponseMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
 
 	waitRequestMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
-
-	waitTimeout: number = 3000
 
 	worker: Worker
 
@@ -22,8 +20,8 @@ export class MessageManager {
 	 * @param eventKey 事件名
 	 * @param message 消息
 	 */
-	send<T = any, S = any>(eventKey: ActionKeys, message: S) {
-		const newMessage = new WorkerMessage<T, S>(eventKey, message)
+	send<T = any, S = any>(eventKey: ActionKeys, message: S, config?: { timeout?: number }) {
+		const newMessage = new WorkerMessage<T, S>(eventKey, message, config)
 		if (this.waitResponseMessageMap.has(eventKey)) {
 			const preWaitRequestMessage = this.waitRequestMessageMap.get(eventKey)
 			if (preWaitRequestMessage) preWaitRequestMessage.cancel()
@@ -42,9 +40,10 @@ export class MessageManager {
 		}
 		this.waitResponseMessageMap.set(message.eventKey, message)
 		this.worker.postMessage(toSendData)
+		if (!message.config.timeout) return
 		setTimeout(() => {
 			this.cancelWaitRespone(message.id, message.eventKey)
-		}, this.waitTimeout)
+		}, message.config.timeout)
 	}
 
 	/**

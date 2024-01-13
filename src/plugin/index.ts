@@ -1,7 +1,6 @@
 import './worker/plugin'
 
-export * from './worker'
-// import { messageManager } from './worker'
+export { messageManager } from './worker'
 
-export * from './interface'
+export * from '../../plugin/interface'
 export * from './worker/plugin'

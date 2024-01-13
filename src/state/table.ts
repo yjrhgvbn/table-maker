@@ -1,11 +1,11 @@
-import type { ColumnConfig, DsField } from 'types'
+import type { DsField } from 'types'
 import { createSlice } from './middleware'
 
 export interface TableState {
 	tableData: DsField[]
-	columnConfigs: ColumnConfig[]
+	// columnConfigs: ColumnConfig[]
 	updateData: (data: DsField[]) => void
-	changeTable: (key: string) => void
+	// changeTable: (key: string) => void
 }
 
 declare module 'state/middleware/type' {
@@ -16,12 +16,12 @@ declare module 'state/middleware/type' {
 
 createSlice<TableState>(set => ({
 	tableData: [],
-	columnConfigs: [],
+	// columnConfigs: [],
 	updateData: (data: DsField[]) => {
 		set({ tableData: data })
-	},
-	changeTable(key: string) {
-		// const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
-		// set({ columnConfigs: newColumnConfigs })
 	}
+	// changeTable(key: string) {
+	// const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
+	// set({ columnConfigs: newColumnConfigs })
+	// }
 }))

@@ -1,4 +1,4 @@
-import { FormItemConfigType, PluginConfig } from '../src/plugin'
+import { FormItemConfigType, PluginConfig } from './interface'
 
 const plugin: PluginConfig = {
 	key: 'md',

@@ -1,4 +1,3 @@
-import { FormItemConfig } from 'plugin'
 import { createSlice } from './middleware'
 
 type FormItemValue = string | number | boolean
@@ -8,12 +7,9 @@ export interface FormState {
 	curForm: FormValue
 	/** a record from data, plugin key as key */
 	formData: Record<string, FormValue>
-	/** current form config */
-	formItemConfigs: FormItemConfig[]
 	updateCurrentPluginFormItem: (key: string, value: FormItemValue) => void
 	updateCurrentPluginForm: (key: string, value: FormValue) => void
 	updateData: (value: Record<string, FormValue>) => void
-	changeForm: (key: string) => void
 }
 
 declare module 'state/middleware/type' {
@@ -25,7 +21,6 @@ declare module 'state/middleware/type' {
 createSlice<FormState>((set, get) => ({
 	curForm: {},
 	formData: {},
-	formItemConfigs: [],
 	updateCurrentPluginFormItem: (key: string, value: FormItemValue) => {
 		const newFormData = { ...get().curForm, [key]: value }
 		set({ curForm: newFormData })
@@ -37,6 +32,5 @@ createSlice<FormState>((set, get) => ({
 	},
 	updateData: value => {
 		set({ formData: value })
-	},
-	changeForm: (key: string) => {}
+	}
 }))

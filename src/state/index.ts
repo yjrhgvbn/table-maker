@@ -1,4 +1,5 @@
 // import { debounce, isEqual } from 'lodash-es'
+import { messageManager } from 'plugin'
 import { createStore } from './middleware'
 
 import.meta.glob(['./*.ts', '!./index.ts'], { eager: true })
@@ -33,8 +34,6 @@ import.meta.glob(['./*.ts', '!./index.ts'], { eager: true })
 export const useStore = createStore()
 export function changePlugin(key: string) {
 	useStore.setState({ curPluginKey: key })
-	useStore.getState().changeForm(key)
-	useStore.getState().changeTable(key)
 }
 export function changeList(key: string) {
 	const targetRow = useStore.getState().list.find(item => item.key === key)
@@ -47,5 +46,8 @@ export function changeList(key: string) {
 	useStore.getState().updateData(plugin)
 	useStore.getState().updateData(table)
 }
+messageManager.send('getPluginList', {}, { timeout: 0 }).on(response => {
+	useStore.getState().setPluginList(response || [])
+})
 
 export * from './form'

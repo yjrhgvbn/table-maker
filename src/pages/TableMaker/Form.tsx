@@ -1,10 +1,11 @@
 import { Box, TextField } from '@mui/material'
 import { useStore } from 'state'
+import { useWorkerMessage } from 'utils/use'
 
 export function Form() {
-	const [formItemConfigs] = useStore(state => [state.formItemConfigs])
 	const [formData, updateForm] = useStore(state => [state.curForm, state.updateCurrentPluginFormItem])
 	const currentPluginKey = useStore(state => state.curPluginKey) || ''
+	const { data: formItemConfigs = [] } = useWorkerMessage('addFormItem', currentPluginKey)
 
 	const handelChange = (key: string, value: string | undefined) => {
 		updateForm(key, value || '')
@@ -19,7 +20,7 @@ export function Form() {
 			noValidate
 			autoComplete='off'
 		>
-			{formItemConfigs
+			{(formItemConfigs || [])
 				.filter(config => !!config.key)
 				.map(formItemConfig => {
 					const { type, label, key } = formItemConfig
