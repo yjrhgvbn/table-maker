@@ -1,4 +1,3 @@
-import { globalPluginCore } from 'plugin'
 import type { ColumnConfig, DsField } from 'types'
 import { createSlice } from './middleware'
 
@@ -22,7 +21,7 @@ createSlice<TableState>(set => ({
 		set({ tableData: data })
 	},
 	changeTable(key: string) {
-		const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
-		set({ columnConfigs: newColumnConfigs })
+		// const newColumnConfigs = (globalPluginCore.execSpecify(key, 'addColumn') || []).filter(Boolean)
+		// set({ columnConfigs: newColumnConfigs })
 	}
 }))

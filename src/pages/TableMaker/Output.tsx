@@ -1,7 +1,7 @@
 import { ContentCopyRounded, LibraryAddCheck } from '@mui/icons-material'
 import { IconButton, Typography } from '@mui/material'
 import Card from '@mui/material/Card'
-import { globalPluginCore } from 'plugin'
+import 'plugin'
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useStore } from 'state'
@@ -28,7 +28,7 @@ export function Output() {
 	})
 	useEffect(() => {
 		startTransition(() => {
-			const responseOutput = globalPluginCore.exec('parseOutput', data, formData) || ''
+			const responseOutput = ''
 			setOutput(responseOutput)
 		})
 	}, [data, formData])

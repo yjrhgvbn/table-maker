@@ -1,6 +1,6 @@
-import { Plugin } from './index'
+import { FormItemConfigType, PluginConfig } from '../src/plugin'
 
-Plugin.create({
+export const plugin: PluginConfig = {
 	key: 'curl',
 	name: 'curl change',
 	addColumn() {
@@ -20,7 +20,7 @@ Plugin.create({
 			{
 				key: 'authorization',
 				label: '认证信息',
-				type: Plugin.formItemConfigType.String
+				type: FormItemConfigType.String
 			}
 		]
 	},
@@ -36,4 +36,5 @@ Plugin.create({
 			}
 		]
 	}
-})
+}
+export default plugin

@@ -2,7 +2,6 @@ import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
 import { Badge, Button, Input, Stack, Tab, Tabs } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import clsx from 'clsx'
-import { globalPluginCore } from 'plugin'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { changePlugin, useStore } from 'state'
@@ -35,7 +34,7 @@ export function Head() {
 		changePlugin(value)
 	}
 	const handleImport = (data: string) => {
-		const result = globalPluginCore.exec('parseImport', data)
+		const result = ''
 		if (result) {
 			updateData(result)
 		}

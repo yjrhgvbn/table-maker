@@ -1,5 +1,4 @@
-import { globalPluginCore } from 'plugin'
-import { FormItemConfig } from 'types'
+import { FormItemConfig } from 'plugin'
 import { createSlice } from './middleware'
 
 type FormItemValue = string | number | boolean
@@ -39,8 +38,5 @@ createSlice<FormState>((set, get) => ({
 	updateData: value => {
 		set({ formData: value })
 	},
-	changeForm: (key: string) => {
-		const newFormItemConfig = (globalPluginCore.execSpecify(key, 'addFormItem') || []).filter(Boolean)
-		set({ curForm: get().formData[key] || {}, formItemConfigs: newFormItemConfig })
-	}
+	changeForm: (key: string) => {}
 }))
