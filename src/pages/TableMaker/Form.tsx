@@ -1,11 +1,13 @@
 import { Box, TextField } from '@mui/material'
+import { useMemo } from 'react'
 import { useStore } from 'state'
 import { useWorkerMessage } from 'utils/use'
 
 export function Form() {
 	const [formData, updateForm] = useStore(state => [state.curForm, state.updateCurrentPluginFormItem])
 	const currentPluginKey = useStore(state => state.curPluginKey) || ''
-	const { data: formItemConfigs = [] } = useWorkerMessage('addFormItem', currentPluginKey)
+	const parameters = useMemo(() => ({ pluginKey: currentPluginKey || '' }), [currentPluginKey])
+	const { data: formItemConfigs = [] } = useWorkerMessage('addFormItem', parameters)
 
 	const handelChange = (key: string, value: string | undefined) => {
 		updateForm(key, value || '')

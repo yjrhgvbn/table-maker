@@ -1,4 +1,4 @@
-import type { DsField } from 'types'
+import { DsField } from './interface'
 import { createSlice } from './middleware'
 
 export interface TableState {

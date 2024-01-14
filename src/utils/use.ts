@@ -1,7 +1,8 @@
-import { ActionKeys, messageManager } from 'plugin'
+import { ActionKeys, ActionParameters } from 'plugin'
+import messageManager from 'plugin/worker/messageManager'
 import { useEffect, useRef, useState } from 'react'
 
-export function useWorkerMessage(key: ActionKeys, message: any, config?: { timeout?: number }) {
+export function useWorkerMessage<K extends ActionKeys>(key: K, message: ActionParameters<K>, config?: { timeout?: number }) {
 	const [response, setResponse] = useState<any>()
 	const isLoading = useRef(true)
 	useEffect(() => {

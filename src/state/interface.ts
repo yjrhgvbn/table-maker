@@ -1,3 +1,5 @@
+export type FormItemValue = string | number | boolean
+export type FormValue = Record<string, FormItemValue>
 export type DsFieldExtend = Record<string, boolean | string | undefined>
 
 // ColumnConfigType 映射string或者boolean

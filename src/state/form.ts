@@ -1,7 +1,6 @@
+import { FormItemValue, FormValue } from './interface'
 import { createSlice } from './middleware'
 
-type FormItemValue = string | number | boolean
-export type FormValue = Record<string, FormItemValue>
 export interface FormState {
 	/** current form data */
 	curForm: FormValue

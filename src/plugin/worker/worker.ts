@@ -41,9 +41,10 @@ function handlePluginMessage(event: MessageEvent<MessageDataType>) {
 			break
 		}
 		case 'addColumn':
+		case 'parseOutput':
 		case 'addFormItem': {
 			new Promise(resolve => {
-				resolve(execPlugin(message, eventKey))
+				resolve(execPlugin(message.pluginKey, eventKey, ...(message.params || [])))
 			}).then(response => {
 				postMessageBack(event, response)
 			})

@@ -1,36 +1,9 @@
 // import { debounce, isEqual } from 'lodash-es'
-import { messageManager } from 'plugin'
+import messageManager from 'plugin/worker/messageManager'
 import { createStore } from './middleware'
 
 import.meta.glob(['./*.ts', '!./index.ts'], { eager: true })
-// export function checkUnsaved() {
-// 	const { curListKey, curListName, isToSave } = useCheckState.getState()
-// 	if (!curListKey) {
-// 		console.warn('save list error: curListKey is empty')
-// 		return false
-// 	}
-// 	const { table, plugin, name } = useListState.getState().list.find(item => item.key === curListKey) || {}
-// 	const toSavePlugin = useFormState.getState().data
-// 	const toSaveTable = useTableState.getState().data
 
-// 	if (curListName !== name || !isEqual(toSavePlugin, plugin) || !isEqual(toSaveTable, table)) {
-// 		if (!isToSave) useCheckState.setState({ isToSave: true })
-// 	} else if (isToSave) {
-// 		useCheckState.setState({ isToSave: false })
-// 	}
-// 	return false
-// }
-// const checkUnsavedDebounce = debounce(checkUnsaved, 100)
-// // TODO: use singel store, wrap setState to checkUnsavedDebounce
-// useCheckState.subscribe(() => {
-// 	checkUnsavedDebounce()
-// })
-// useFormState.subscribe(() => {
-// 	checkUnsavedDebounce()
-// })
-// useTableState.subscribe(() => {
-// 	checkUnsavedDebounce()
-// })
 export const useStore = createStore()
 export function changePlugin(key: string) {
 	useStore.setState({ curPluginKey: key })

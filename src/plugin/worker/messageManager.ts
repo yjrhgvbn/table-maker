@@ -1,5 +1,6 @@
-import type { ActionKeys } from './interface'
+import type { ActionKeys, ActionParameters } from './interface'
 import { WorkerMessage } from './message'
+import MyWorker from './worker?worker'
 
 export class MessageManager {
 	waitResponseMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
@@ -20,7 +21,7 @@ export class MessageManager {
 	 * @param eventKey 事件名
 	 * @param message 消息
 	 */
-	send<T = any, S = any>(eventKey: ActionKeys, message: S, config?: { timeout?: number }) {
+	send<K extends ActionKeys, T = any, S = ActionParameters<K>>(eventKey: ActionKeys, message: S, config?: { timeout?: number }) {
 		const newMessage = new WorkerMessage<T, S>(eventKey, message, config)
 		if (this.waitResponseMessageMap.has(eventKey)) {
 			const preWaitRequestMessage = this.waitRequestMessageMap.get(eventKey)
@@ -89,4 +90,6 @@ export class MessageManager {
 		}
 	}
 }
-export default MessageManager
+
+export const messageManager = new MessageManager(new MyWorker())
+export default messageManager
