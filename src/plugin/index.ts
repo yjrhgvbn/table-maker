@@ -1,8 +1,4 @@
-import './plugin'
+import './worker/plugin'
 
-export * from './core'
-
-const modules = import.meta.glob(['../../plugin/*.ts', '!../../plugin/index.ts'])
-for (const module of Object.values(modules)) {
-	module()
-}
+export * from '../../plugin/interface'
+export * from './worker/plugin'

@@ -2,7 +2,7 @@ import { createSlice } from './middleware'
 
 interface PluginState {
 	pluginList: { key: string; name: string }[]
-	addPlugin: (key: string) => void
+	setPluginList: (list: { key: string; name: string }[]) => void
 }
 
 declare module 'state/middleware/type' {
@@ -11,14 +11,9 @@ declare module 'state/middleware/type' {
 	}
 }
 
-createSlice<PluginState>((set, get) => ({
+createSlice<PluginState>(set => ({
 	pluginList: [],
-	addPlugin: (key?: string, name?: string) => {
-		if (!key) return
-		const { pluginList } = get()
-		if (pluginList.findIndex(item => item.key === key) === -1) {
-			pluginList.push({ key, name: name || key })
-			set({ pluginList })
-		}
+	setPluginList: list => {
+		set({ pluginList: list })
 	}
 }))

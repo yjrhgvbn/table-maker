@@ -1,18 +1,19 @@
+import type { ActionKeys, ActionParameters } from './interface'
 import { WorkerMessage } from './message'
+import MyWorker from './worker?worker'
 
 export class MessageManager {
-	waitResponseMessageMap: Map<string, WorkerMessage> = new Map()
+	waitResponseMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
 
-	waitRequestMessageMap: Map<string, WorkerMessage> = new Map()
+	waitRequestMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
 
-	waitTimeout: number = 3000
 	worker: Worker
 
 	constructor(worker: Worker) {
 		this.worker = worker
-		this.worker.onmessage = event => {
+		this.worker.addEventListener('message', event => {
 			this.handleMessage(event)
-		}
+		})
 	}
 
 	/**
@@ -20,8 +21,8 @@ export class MessageManager {
 	 * @param eventKey 事件名
 	 * @param message 消息
 	 */
-	send(eventKey: string, message: any) {
-		const newMessage = new WorkerMessage(eventKey, message)
+	send<K extends ActionKeys, T = any, S = ActionParameters<K>>(eventKey: ActionKeys, message: S, config?: { timeout?: number }) {
+		const newMessage = new WorkerMessage<T, S>(eventKey, message, config)
 		if (this.waitResponseMessageMap.has(eventKey)) {
 			const preWaitRequestMessage = this.waitRequestMessageMap.get(eventKey)
 			if (preWaitRequestMessage) preWaitRequestMessage.cancel()
@@ -40,9 +41,10 @@ export class MessageManager {
 		}
 		this.waitResponseMessageMap.set(message.eventKey, message)
 		this.worker.postMessage(toSendData)
+		if (!message.config.timeout) return
 		setTimeout(() => {
 			this.cancelWaitRespone(message.id, message.eventKey)
-		}, this.waitTimeout)
+		}, message.config.timeout)
 	}
 
 	/**
@@ -66,10 +68,11 @@ export class MessageManager {
 	 * 发送等待中的消息
 	 * @param eventKey 事件名
 	 */
-	private ensureWaitRequest(eventKey: string) {
+	private ensureWaitRequest(eventKey: ActionKeys) {
 		const message = this.waitRequestMessageMap.get(eventKey)
 		if (message) {
 			this.sendToWorker(message)
+			this.waitRequestMessageMap.delete(eventKey)
 		}
 	}
 
@@ -78,7 +81,7 @@ export class MessageManager {
 	 * @param id 事件id
 	 * @param eventKey 事件名
 	 */
-	cancelWaitRespone(id: string, eventKey: string) {
+	cancelWaitRespone(id: string, eventKey: ActionKeys) {
 		const message = this.waitResponseMessageMap.get(eventKey)
 		if (message && message.id === id) {
 			message.cancel()
@@ -88,4 +91,5 @@ export class MessageManager {
 	}
 }
 
-export default MessageManager
+export const messageManager = new MessageManager(new MyWorker())
+export default messageManager

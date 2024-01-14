@@ -1,28 +1,36 @@
 import { nanoid } from 'nanoid'
+import { ActionKeys } from './interface'
 
-export class WorkerMessage {
+export class WorkerMessage<T = any, S = any> {
 	/** response */
-	response: any = null
+	response: T | null = null
+
 	/** send message */
-	sendMessage: any = null
+	sendMessage: S
+
 	/** event key */
-	eventKey: string = ''
+	eventKey: ActionKeys
+
 	/** message id */
 	id: string = nanoid()
+
 	/** is cancel */
 	isCancel: boolean = false
+
 	/** is pedding */
 	isPedding: boolean = true
 
-	#cbList: ((response: any) => void)[] = []
+	#cbList: ((response: T | null) => void)[] = []
 
-	constructor(key: string, sendMessage: any) {
+	config: { timeout?: number } = {}
+
+	constructor(key: ActionKeys, sendMessage: S, config?: { timeout?: number }) {
 		this.eventKey = key
 		this.sendMessage = sendMessage
-		this.response = null
+		this.config = config || { timeout: 3000 }
 	}
 
-	on(callback: (response: any) => void) {
+	on(callback: (response: T | null) => void) {
 		if (this.response || this.isCancel) {
 			callback(this.response)
 		} else {
@@ -30,16 +38,16 @@ export class WorkerMessage {
 		}
 	}
 
-	emit(response: any) {
+	emit(response: T) {
 		this.response = response
-		this.#cbList.forEach(cb => cb(response))
+		for (const callback of this.#cbList) callback(response)
 		this.isPedding = false
 	}
 
 	cancel() {
 		this.isCancel = true
 		this.isPedding = false
-		this.#cbList.forEach(cb => cb(null))
+		for (const callback of this.#cbList) callback(null)
 	}
 }
 

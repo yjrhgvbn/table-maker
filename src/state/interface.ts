@@ -1,3 +1,5 @@
+export type FormItemValue = string | number | boolean
+export type FormValue = Record<string, FormItemValue>
 export type DsFieldExtend = Record<string, boolean | string | undefined>
 
 // ColumnConfigType 映射string或者boolean
@@ -21,16 +23,4 @@ export interface ColumnConfig {
 	header: string
 	type?: ColumnConfigType
 	options?: string[]
-}
-
-export enum FormItemConfigType {
-	String = 'string',
-	Select = 'select',
-	Switch = 'switch'
-}
-
-export interface FormItemConfig {
-	key?: string
-	label?: string
-	type?: FormItemConfigType
 }

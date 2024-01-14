@@ -4,24 +4,32 @@ import { MessageManager } from '../messageManager'
 
 class MockWorker {
 	onmessage: (m?: any) => void
+
 	hasResponse: boolean = true
+
 	constructor(hasResponse = true) {
 		this.hasResponse = hasResponse
 		this.onmessage = () => {}
 	}
 
-	postMessage(msg: any) {
+	addEventListener(event: string, callback: (m?: any) => void) {
+		if (event === 'message') {
+			this.onmessage = callback
+		}
+	}
+
+	postMessage(message: any) {
 		if (!this.hasResponse) return
 		setTimeout(() => {
 			this.onmessage({
-				data: msg
+				data: message
 			})
 		}, 500)
 	}
 }
 
 const toSendMessage = 'hello world'
-const toSendEventKey = 'test'
+const toSendEventKey = 'addColumn'
 
 test('can get response', async () => {
 	const messageManager = new MessageManager(new MockWorker() as any)
@@ -41,20 +49,22 @@ test('cancel time out', async () => {
 
 test('sending a message while waiting for a response only holds the last message', async () => {
 	const messageManager = new MessageManager(new MockWorker() as any)
-	const fnList = new Array(4).fill(0).map(async (_, i) => {
-		const mockFn = vi.fn()
-		const mess = messageManager.send(toSendEventKey, toSendMessage + i)!
-		mess.on(mockFn)
-		await new Promise(resolve => mess.on(resolve))
-		expect(mockFn).toHaveBeenCalledTimes(1)
+	const functionList = Array.from({ length: 4 })
+		.fill(0)
+		.map(async (_, index) => {
+			const mockFunction = vi.fn()
+			const mess = messageManager.send(toSendEventKey, toSendMessage + index)!
+			mess.on(mockFunction)
+			await new Promise(resolve => mess.on(resolve))
+			expect(mockFunction).toHaveBeenCalledTimes(1)
 
-		if (i === 0) {
-			expect(mockFn.mock.calls[0][0]).toBe(toSendMessage + 0)
-		} else if (i === 3) {
-			expect(mockFn.mock.calls[0][0]).toBe(toSendMessage + 3)
-		} else {
-			expect(mockFn.mock.calls[0][0]).toBe(null)
-		}
-	})
-	await Promise.all(fnList)
+			if (index === 0) {
+				expect(mockFunction.mock.calls[0][0]).toBe(toSendMessage + 0)
+			} else if (index === 3) {
+				expect(mockFunction.mock.calls[0][0]).toBe(toSendMessage + 3)
+			} else {
+				expect(mockFunction.mock.calls[0][0]).toBe(null)
+			}
+		})
+	await Promise.all(functionList)
 })

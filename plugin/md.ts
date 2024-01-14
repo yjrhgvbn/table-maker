@@ -1,6 +1,6 @@
-import { Plugin } from './index'
+import { FormItemConfigType, PluginConfig } from './interface'
 
-Plugin.create({
+const plugin: PluginConfig = {
 	key: 'md',
 	name: 'md export',
 	addColumn() {
@@ -20,11 +20,13 @@ Plugin.create({
 			{
 				key: 'authorization',
 				label: '认证信息',
-				type: Plugin.formItemConfigType.String
+				type: FormItemConfigType.String
 			}
 		]
 	},
 	parseOutput(data, formData) {
 		return `${JSON.stringify(data)}\n 123 ${JSON.stringify(formData)}`
 	}
-})
+}
+
+export default plugin
