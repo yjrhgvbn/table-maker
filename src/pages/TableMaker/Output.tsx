@@ -2,46 +2,36 @@ import { ContentCopyRounded, LibraryAddCheck } from '@mui/icons-material'
 import { IconButton, Typography } from '@mui/material'
 import Card from '@mui/material/Card'
 import 'plugin'
-import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useStore } from 'state'
 import { useWorkerMessage } from 'utils/use'
 
 export function Output() {
-	const [, startTransition] = useTransition()
 	const data = useStore(state => state.tableData)
 	const formData = useStore(state => state.curForm)
 	const currentPluginKey = useStore(state => state.curPluginKey) || ''
-
-	const parameters = useMemo(
-		() => ({
-			pluginKey: currentPluginKey,
-			params: [data, formData]
-		}),
-		[currentPluginKey, data, formData]
-	)
-	const { data: parseOutput } = useWorkerMessage('parseOutput', parameters as any)
-	const [output, setOutput] = useState('')
+	const { data: parseOutput } = useWorkerMessage('parseOutput', {
+		pluginKey: currentPluginKey,
+		params: [data, formData]
+	})
 	const [copiedTimer, setCopiedTimer] = useState<null | number>(null)
 	const [enabled, setEnabled] = useState(false)
+
 	const handleCopy = useCallback(() => {
-		navigator.clipboard.writeText(output).then(() => {
+		navigator.clipboard.writeText(parseOutput).then(() => {
 			if (copiedTimer) clearTimeout(copiedTimer)
 			const newCopiedTimer = setTimeout(() => {
 				setCopiedTimer(null)
 			}, 2000) as unknown as number
 			setCopiedTimer(newCopiedTimer)
 		})
-	}, [output, copiedTimer])
+	}, [parseOutput, copiedTimer])
 
 	useHotkeys('mod+c,ctrl+c', () => handleCopy(), {
 		enabled
 	})
-	useEffect(() => {
-		startTransition(() => {
-			setOutput(parseOutput)
-		})
-	}, [parseOutput])
+
 	const elementReference = useRef(null)
 	const handleMouseEnter = () => {
 		setEnabled(true)
@@ -60,7 +50,7 @@ export function Output() {
 					</IconButton>
 				</div>
 				<Typography variant='subtitle1' gutterBottom className='min-h-[10rem] whitespace-pre-wrap'>
-					{output}
+					{parseOutput}
 				</Typography>
 			</div>
 		</Card>

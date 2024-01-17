@@ -1,6 +1,5 @@
 import type { ActionKeys, ActionParameters } from './interface'
 import { WorkerMessage } from './message'
-import MyWorker from './worker?worker'
 
 export class MessageManager {
 	waitResponseMessageMap: Map<ActionKeys, WorkerMessage> = new Map()
@@ -90,6 +89,4 @@ export class MessageManager {
 		}
 	}
 }
-
-export const messageManager = new MessageManager(new MyWorker())
-export default messageManager
+export default MessageManager

@@ -1,5 +1,4 @@
 import { DsTable } from 'components/Table'
-import { useMemo } from 'react'
 import { useStore } from 'state'
 import { DsField } from 'state/interface'
 import { useWorkerMessage } from 'utils/use'
@@ -20,8 +19,7 @@ export function EditTable(): JSX.Element {
 	const [data, setData] = useStore(state => [state.tableData, state.updateData])
 	const currentListKey = useStore(state => state.curListKey)
 	const currentPluginKey = useStore(state => state.curPluginKey)
-	const parameters = useMemo(() => ({ pluginKey: currentPluginKey || '' }), [currentPluginKey])
-	const { data: columnConfigs } = useWorkerMessage('addColumn', parameters)
+	const { data: columnConfigs } = useWorkerMessage('addColumn', { pluginKey: currentPluginKey || '' })
 	// const [data, setData] = useDsState((state) => [state.data, state.updateData]);
 	// const [extraParameters, setExtraParameter] = useDsState((state) => [state.extraParams, state.updateExtraParam]);
 	// const [activeTab, setActiveTab] = useDsState((state) => [state.activeTab, state.updateActiveTab]);
