@@ -17,7 +17,7 @@ const loadPresetPluginPromise = new Promise(r => {
 	resolveLoadPresetPlugin = r
 })
 async function loadPresetPlugin() {
-	const modules = import.meta.glob(['../../../plugin/*.ts', '!../../../plugin/interface.ts'])
+	const modules = import.meta.glob(['../../../plugin/*.ts', '../../../plugin/*/index.ts', '!../../../plugin/interface.ts'])
 	const loadFunctionList = Object.values(modules).map(module => module())
 
 	const moduleResloveList: any[] = await Promise.all(loadFunctionList)
@@ -40,6 +40,7 @@ function handlePluginMessage(event: MessageEvent<MessageDataType>) {
 			postMessageBack(event, getPluginList())
 			break
 		}
+		case 'parseImport':
 		case 'addColumn':
 		case 'parseOutput':
 		case 'addFormItem': {

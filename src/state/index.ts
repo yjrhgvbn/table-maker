@@ -1,5 +1,5 @@
 // import { debounce, isEqual } from 'lodash-es'
-import messageManager from 'plugin/worker/messageManager'
+import { messageManager } from 'plugin'
 import { createStore } from './middleware'
 
 import.meta.glob(['./*.ts', '!./index.ts'], { eager: true })

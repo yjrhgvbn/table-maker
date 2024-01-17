@@ -20,8 +20,8 @@ export class MessageManager {
 	 * @param eventKey 事件名
 	 * @param message 消息
 	 */
-	send<K extends ActionKeys, T = any, S = ActionParameters<K>>(eventKey: ActionKeys, message: S, config?: { timeout?: number }) {
-		const newMessage = new WorkerMessage<T, S>(eventKey, message, config)
+	send<K extends ActionKeys, T = any>(eventKey: K, message: ActionParameters<K>, config?: { timeout?: number }) {
+		const newMessage = new WorkerMessage<T, ActionParameters<K>>(eventKey, message, config)
 		if (this.waitResponseMessageMap.has(eventKey)) {
 			const preWaitRequestMessage = this.waitRequestMessageMap.get(eventKey)
 			if (preWaitRequestMessage) preWaitRequestMessage.cancel()

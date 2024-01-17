@@ -2,9 +2,11 @@ import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
 import { Badge, Button, Input, Stack, Tab, Tabs } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import clsx from 'clsx'
+import { messageManager } from 'plugin'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { changePlugin, useStore } from 'state'
+import { FormValue } from 'state/interface'
 import loadLocalScript from 'utils/load'
 import { ImportModal } from './ImportModal'
 
@@ -33,8 +35,10 @@ export function Head() {
 	const handelTabChange = (_: any, value: any) => {
 		changePlugin(value)
 	}
-	const handleImport = () => {
-		const result = ''
+	const handleImport = async (data: string) => {
+		const result = await new Promise<Record<string, FormValue>>(resolve => {
+			messageManager.send('parseImport', { pluginKey: currentPluginKey || '', params: [data] }).on(resolve)
+		})
 		if (result) {
 			updateData(result)
 		}

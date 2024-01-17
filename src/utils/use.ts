@@ -1,9 +1,7 @@
-import { ActionKeys, ActionParameters } from 'plugin'
-import messageManager from 'plugin/worker/messageManager'
+import { ActionKeys, ActionParameters, messageManager } from 'plugin'
 import useSWR from 'swr'
 
 export function useWorkerMessage<T = any, K extends ActionKeys = 'addColumn'>(key: K, message: ActionParameters<K>, config?: { timeout?: number }) {
-	console.log('🚀 ~ message:', key, message)
 	// const [response, setResponse] = useState<any>()
 	// const isLoading = useRef(true)
 	// useEffect(() => {

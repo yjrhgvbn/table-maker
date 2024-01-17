@@ -1,4 +1,5 @@
-import { FormItemConfigType, PluginConfig } from './interface'
+import { FormItemConfigType, PluginConfig } from '../interface'
+import { curlToHAR } from './parse'
 
 export const plugin: PluginConfig = {
 	key: 'curl',
@@ -25,16 +26,17 @@ export const plugin: PluginConfig = {
 		]
 	},
 	parseOutput(data, formData) {
+		// return curlToHAR(data)
 		return `${JSON.stringify(data)}\n${JSON.stringify(formData)}`
 	},
 	parseImport(data) {
-		return [
-			{
-				id: 'test',
-				key: data,
-				value: 'test'
-			}
-		]
+		const res = curlToHAR(data)
+		return Object.keys(res).map(key => ({
+			id: key,
+			key,
+			value: res[key]
+		}))
+		// return res
 	}
 }
 export default plugin
