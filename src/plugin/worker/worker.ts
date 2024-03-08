@@ -64,4 +64,5 @@ onmessage = function (event: MessageEvent<MessageDataType>) {
 		handlePluginMessage(event)
 	})
 }
+// eslint-disable-next-line unicorn/prefer-top-level-await
 loadPresetPlugin()

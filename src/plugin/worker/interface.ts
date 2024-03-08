@@ -13,6 +13,7 @@ export type PareOutputType = (data: DsField[], formData: FormValue) => PromiseOr
 export interface PluginConfig {
 	name: string
 	key: string
+	describe?: string
 	addColumn?: AddColumnType
 	addFormItem?: AddFormItemType
 	parseImport?: ParseImportType

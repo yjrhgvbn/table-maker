@@ -15,7 +15,7 @@ export function TableMaker() {
 			<div className={clsx('flex-1')}>
 				<Head />
 				<EditTable />
-				<Stack flexDirection='row' gap={10} sx={{ marginTop: 10 }}>
+				<Stack flexDirection='row' gap={10} sx={{ marginTop: 10 }} style={{ maxWidth: 'calc(100vw - 250px)' }}>
 					<Form />
 					<Output />
 				</Stack>

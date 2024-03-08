@@ -3,7 +3,8 @@ import { curlToHAR } from './parse'
 
 export const plugin: PluginConfig = {
 	key: 'curl',
-	name: 'curl change',
+	name: 'curl',
+	describe: '替换curl请求的authorization请求头',
 	addColumn() {
 		return [
 			{
@@ -26,8 +27,25 @@ export const plugin: PluginConfig = {
 		]
 	},
 	parseOutput(data, formData) {
+		const formAuthorization = formData.authorization
+		const dataObj = {} as Record<string, string>
+		data.forEach(val => {
+			dataObj[val.key as string] = val.value as string
+		})
+		if (dataObj.Authorization) {
+			dataObj.Authorization = formAuthorization as string
+		}
+		const { method, url, queryString, postData, ...headers } = dataObj
+		let curlCommand = `curl -X ${method} ${url} \\
+  -H '${Object.entries(headers)
+		.map(([key, value]) => `${key}: ${value}`)
+		.join(`' -H '`)}'`
+		if (postData) {
+			curlCommand += ` \\
+		-d '${JSON.stringify(postData)}'`
+		}
 		// return curlToHAR(data)
-		return `${JSON.stringify(data)}\n${JSON.stringify(formData)}`
+		return curlCommand
 	},
 	parseImport(data) {
 		const res = curlToHAR(data)
