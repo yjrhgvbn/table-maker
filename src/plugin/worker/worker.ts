@@ -1,5 +1,7 @@
-import { addPlugin, execPlugin, getPluginList } from 'plugin/worker/plugin'
 import { ActionKeys } from './interface'
+import { addPlugin, execPlugin, getPluginList } from './plugin'
+
+const modules = import.meta.glob(['../../../plugin/*.ts', '../../../plugin/*/index.ts', '!../../../plugin/interface.ts'], { eager: true })
 
 // const interval = () => {
 // 	timer = setInterval(() => {
@@ -17,8 +19,7 @@ const loadPresetPluginPromise = new Promise(r => {
 	resolveLoadPresetPlugin = r
 })
 async function loadPresetPlugin() {
-	const modules = import.meta.glob(['../../../plugin/*.ts', '../../../plugin/*/index.ts', '!../../../plugin/interface.ts'])
-	const loadFunctionList = Object.values(modules).map(module => module())
+	const loadFunctionList = Object.values(modules)
 
 	const moduleResloveList: any[] = await Promise.all(loadFunctionList)
 	for (const plugin of moduleResloveList) {
@@ -63,4 +64,4 @@ onmessage = function (event: MessageEvent<MessageDataType>) {
 		handlePluginMessage(event)
 	})
 }
-await loadPresetPlugin()
+loadPresetPlugin()

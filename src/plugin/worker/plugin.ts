@@ -16,7 +16,6 @@ export function addPlugin(config: PluginConfig) {
 export function execPlugin<K extends PluginConfigExecKey>(pluginKey: string, eventName: K, ...argument: Parameters<RequiredCostomPluginFunction[K]>) {
 	if (!pluginKey) return null
 	const plugin = pluginMap.get(pluginKey)
-	console.log('🚀 ~ plugin:', plugin)
 	if (!plugin) return null
 	// @ts-expect-error 无法确定类型
 	return plugin[eventName]?.(...argument)
