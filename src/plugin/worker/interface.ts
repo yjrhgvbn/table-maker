@@ -11,12 +11,19 @@ export type AddFormItemType = () => PromiseOrNot<FormItemConfig[]>
 export type ParseImportType = (data: string) => PromiseOrNot<DsField[]>
 export type PareOutputType = (data: DsField[], formData: FormValue) => PromiseOrNot<string>
 export interface PluginConfig {
+	/** 插件名称,tab标签上展示 */
 	name: string
+	/** 插件唯一标识 */
 	key: string
+	/** 插件描述 */
 	describe?: string
+	/** 表单添加列数据 */
 	addColumn?: AddColumnType
+	/** 添加表单 */
 	addFormItem?: AddFormItemType
+	/** 导入时数据如何解析 */
 	parseImport?: ParseImportType
+	/** 怎么输出表格的数据 */
 	parseOutput?: PareOutputType
 }
 
